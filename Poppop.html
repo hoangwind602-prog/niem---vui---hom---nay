@@ -172,7 +172,7 @@
       top: 128px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 1000;
+      z-index: 30;
       background: rgba(255,255,255,0.14);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 999px;
@@ -194,14 +194,14 @@
     .restart-btn, .collection-btn {
       position: absolute;
       bottom: 24px;
-      z-index: 1000;
+      z-index: 20;
       border: none;
       border-radius: 999px;
       padding: 14px 20px;
       font-size: 1rem;
       font-weight: 600;
-      background: rgba(255,255,255,0.9);
-      color: #000;
+      background: rgba(255,255,255,0.18);
+      color: white;
       backdrop-filter: blur(10px);
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(0,0,0,0.18);
@@ -733,7 +733,7 @@
       obj.style.top = Math.random() * (window.innerHeight - size - 180) + 110 + "px";
       obj.style.animationDuration = (Math.random() * 2 + 3) + "s";
 
-      if (rand < 0.08) {
+      if (rand < 0.005) {
         // danger thật chỉ 3%
         obj.classList.add("danger");
         obj.textContent = dangerIcons[Math.floor(Math.random() * dangerIcons.length)];

@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0e7f5;
+    background: #f0e7f5;
     font-family: "Segoe UI", sans-serif;
   }
 
@@ -31,11 +31,13 @@
     user-select: none;
   }
 
+  /* Hiệu ứng thở/phồng xẹp */
   @keyframes breathe {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.08); }
   }
 
+  /* Mặt cute */
   .face {
     position: relative;
     width: 60%;
@@ -46,11 +48,10 @@
     position: absolute;
     width: 8px;
     height: 12px;
-    background-color: #3b3246;
+    background: #3b3246;
     border-radius: 50%;
     top: 20%;
   }
-
   .eye.left { left: 20%; }
   .eye.right { right: 20%; }
 
@@ -58,11 +59,10 @@
     position: absolute;
     width: 16px;
     height: 6px;
-    background-color: rgba(255, 145, 170, 0.35);
+    background: rgba(255, 145, 170, 0.35);
     border-radius: 50%;
     top: 50%;
   }
-
   .blush.left { left: 15%; }
   .blush.right { right: 15%; }
 
@@ -77,6 +77,7 @@
     bottom: 15%;
   }
 
+  /* Tên hiển thị */
   .name-tag {
     position: absolute;
     top: 130%;
@@ -107,7 +108,7 @@
 
   bong.addEventListener("click", () => {
     const newName = prompt("Đặt tên cho cục bông dễ thương của bạn:", nameTag.textContent);
-    if (newName) {
+    if(newName) {
       nameTag.textContent = newName;
     }
   });

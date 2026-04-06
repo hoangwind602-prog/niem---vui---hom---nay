@@ -13,713 +13,495 @@
     body {
       margin: 0;
       font-family: "Segoe UI", sans-serif;
-      background: linear-gradient(180deg, #fdfcff 0%, #f6f9ff 50%, #fff7fb 100%);
-      color: #5f5a66;
+      background: linear-gradient(180deg, #f8f5f1 0%, #f4f0eb 100%);
+      color: #4a4038;
       min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
     }
 
-    .bg-glow {
-      position: fixed;
-      border-radius: 50%;
-      filter: blur(70px);
-      opacity: 0.35;
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .glow1 {
-      width: 260px;
-      height: 260px;
-      background: #ffd9ef;
-      top: -50px;
-      left: -40px;
-    }
-
-    .glow2 {
-      width: 300px;
-      height: 300px;
-      background: #dcecff;
-      top: 120px;
-      right: -70px;
-    }
-
-    .glow3 {
-      width: 260px;
-      height: 260px;
-      background: #fff1d8;
-      bottom: -80px;
-      left: 30%;
-    }
-
-    .wrap {
-      position: relative;
-      z-index: 2;
+    .app {
+      width: 100%;
       max-width: 1100px;
-      margin: 0 auto;
-      padding: 24px 18px 40px;
     }
 
     .hero {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .card {
-      width: 100%;
-      max-width: 460px;
-      background: rgba(255,255,255,0.75);
-      border: 1px solid rgba(255,255,255,0.7);
-      backdrop-filter: blur(16px);
-      border-radius: 34px;
-      padding: 34px 24px;
       text-align: center;
-      box-shadow: 0 18px 50px rgba(181, 171, 191, 0.16);
+      padding: 30px 20px 10px;
     }
 
-    .little-icon {
-      width: 92px;
-      height: 92px;
-      margin: 0 auto 18px;
-      border-radius: 28px;
-      background: linear-gradient(145deg, #fff, #f7ebf5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2.5rem;
-      box-shadow: 0 14px 28px rgba(203, 180, 199, 0.18);
-      animation: floaty 3s ease-in-out infinite;
-    }
-
-    @keyframes floaty {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
-    h1 {
+    .hero h1 {
       margin: 0;
       font-size: 2.4rem;
-      color: #5c5a72;
+      font-weight: 800;
       letter-spacing: 0.5px;
+      color: #6d5b4d;
     }
 
-    .sub {
+    .hero p {
       margin-top: 10px;
+      color: #8b7a6d;
       font-size: 1rem;
-      color: #7d7788;
-      line-height: 1.8;
-    }
-
-    .main-btn, .soft-btn, .mode-card, .action-btn {
-      border: none;
-      cursor: pointer;
-      transition: 0.22s ease;
-      font-family: inherit;
-    }
-
-    .main-btn {
-      margin-top: 22px;
-      padding: 15px 26px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #ffd8eb, #dcecff);
-      color: #5d5a67;
-      font-size: 1rem;
-      font-weight: 700;
-      box-shadow: 0 12px 28px rgba(200, 180, 200, 0.18);
-    }
-
-    .main-btn:hover,
-    .soft-btn:hover,
-    .action-btn:hover,
-    .mode-card:hover {
-      transform: translateY(-2px) scale(1.02);
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .editor-section {
-      padding-top: 22px;
-      padding-bottom: 40px;
-    }
-
-    .top-head {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .top-head h2 {
-      margin: 0;
-      font-size: 2rem;
-      color: #5f5a69;
-    }
-
-    .top-head p {
-      margin: 10px auto 0;
-      max-width: 620px;
-      line-height: 1.8;
-      color: #7c7685;
-    }
-
-    .editor-grid {
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 22px;
-      align-items: start;
-    }
-
-    .preview-card, .side-card {
-      background: rgba(255,255,255,0.72);
-      border: 1px solid rgba(255,255,255,0.78);
-      backdrop-filter: blur(16px);
-      border-radius: 30px;
-      padding: 20px;
-      box-shadow: 0 16px 40px rgba(181, 171, 191, 0.12);
-    }
-
-    .canvas-wrap {
-      position: relative;
-      width: 100%;
-      background: linear-gradient(180deg, #f8fbff, #fff7fb);
-      border-radius: 26px;
-      overflow: hidden;
-      min-height: 420px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.8);
-    }
-
-    canvas {
-      max-width: 100%;
-      max-height: 75vh;
-      border-radius: 22px;
-      display: block;
-    }
-
-    .placeholder {
-      padding: 30px;
-      text-align: center;
-      color: #8b8494;
-      line-height: 1.8;
-      font-size: 0.98rem;
-    }
-
-    .modes {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .mode-card {
-      background: rgba(255,255,255,0.9);
-      border: 1px solid rgba(238, 231, 242, 1);
-      border-radius: 22px;
-      padding: 16px 14px;
-      text-align: left;
-      box-shadow: 0 10px 24px rgba(201, 188, 210, 0.10);
-    }
-
-    .mode-card.active {
-      outline: 2px solid rgba(214, 201, 255, 0.8);
-      background: linear-gradient(180deg, #fff, #f8f6ff);
-    }
-
-    .mode-icon {
-      font-size: 1.4rem;
-      margin-bottom: 8px;
-    }
-
-    .mode-title {
-      font-weight: 700;
-      color: #5d5868;
-      margin-bottom: 6px;
-    }
-
-    .mode-desc {
-      font-size: 0.9rem;
-      line-height: 1.6;
-      color: #817b88;
-    }
-
-    .soft-btn {
-      width: 100%;
-      margin-top: 14px;
-      padding: 14px 18px;
-      border-radius: 18px;
-      background: #ffffff;
-      color: #5d5a67;
-      font-weight: 700;
-      box-shadow: 0 10px 24px rgba(199, 186, 208, 0.12);
-    }
-
-    .action-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 18px;
-    }
-
-    .action-btn {
-      flex: 1;
-      min-width: 140px;
-      padding: 14px 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.95);
-      color: #5f5a66;
-      font-weight: 700;
-      box-shadow: 0 10px 24px rgba(199, 186, 208, 0.12);
-    }
-
-    .tiny-note {
-      margin-top: 16px;
-      text-align: center;
-      color: #8b8390;
-      font-size: 0.95rem;
       line-height: 1.7;
     }
 
-    .footer-note {
-      text-align: center;
-      margin-top: 34px;
-      color: #9b93a0;
-      font-size: 0.95rem;
+    .main-card {
+      margin-top: 20px;
+      background: rgba(255,255,255,0.78);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(150,130,110,0.08);
+      border-radius: 28px;
+      box-shadow: 0 18px 40px rgba(90,70,50,0.08);
+      padding: 24px;
     }
 
-    .loading-box {
-      margin-top: 14px;
-      padding: 12px 14px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #fff7fb, #f2f8ff);
-      color: #7c7484;
-      font-size: 0.94rem;
-      text-align: center;
+    .top-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+
+    .btn, .upload-label {
+      border: none;
+      border-radius: 999px;
+      padding: 13px 18px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+      background: #efe7df;
+      color: #5b4b3e;
+      box-shadow: 0 8px 18px rgba(80,60,40,0.08);
+    }
+
+    .btn:hover, .upload-label:hover {
+      transform: translateY(-2px);
+      background: #e7ddd2;
+    }
+
+    input[type="file"] {
       display: none;
     }
 
-    .loading-box.show {
-      display: block;
-      animation: pulseSoft 1.2s infinite ease-in-out;
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
     }
 
-    @keyframes pulseSoft {
-      0%,100% { opacity: 0.75; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.015); }
+    .preview-card, .panel {
+      background: #fcfaf8;
+      border-radius: 24px;
+      padding: 18px;
+      border: 1px solid rgba(120,100,80,0.08);
+    }
+
+    .preview-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 5;
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #f2ebe3, #ede4db);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .preview-wrap::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top left, rgba(255,255,255,0.35), transparent 40%);
+      pointer-events: none;
+    }
+
+    #canvas {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 18px;
+      display: none;
+    }
+
+    .placeholder {
+      text-align: center;
+      color: #9d8c7f;
+      padding: 30px;
+      line-height: 1.8;
+      font-size: 1rem;
+    }
+
+    .section-title {
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #5c4b3e;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .filter-btn {
+      border: 1px solid rgba(120,100,80,0.10);
+      background: #f6f0ea;
+      border-radius: 18px;
+      padding: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      color: #5c4b3e;
+      transition: 0.2s ease;
+    }
+
+    .filter-btn:hover {
+      transform: scale(1.02);
+      background: #efe6dd;
+    }
+
+    .filter-btn.active {
+      background: #dfcfc1;
+      color: #4b3b2f;
+      border-color: rgba(100,80,60,0.16);
+    }
+
+    .slider-group {
+      margin-bottom: 16px;
+    }
+
+    .slider-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.92rem;
+      margin-bottom: 7px;
+      color: #6d5d51;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      appearance: none;
+      height: 8px;
+      border-radius: 999px;
+      background: #e8ddd2;
+      outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #bfa58d;
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 3px 10px rgba(90,70,50,0.15);
+    }
+
+    .small-note {
+      margin-top: 16px;
+      font-size: 0.92rem;
+      color: #8d7c6f;
+      line-height: 1.7;
+      background: #f6f0ea;
+      padding: 14px;
+      border-radius: 18px;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px 0 10px;
+      color: #9b8a7e;
+      font-size: 0.95rem;
     }
 
     @media (max-width: 900px) {
-      .editor-grid {
+      .editor-layout {
         grid-template-columns: 1fr;
       }
 
-      .card {
-        padding: 30px 20px;
+      .filters {
+        grid-template-columns: repeat(2, 1fr);
       }
 
-      h1 {
+      .hero h1 {
         font-size: 2rem;
       }
+    }
 
-      .top-head h2 {
-        font-size: 1.7rem;
+    @media (max-width: 520px) {
+      .main-card {
+        padding: 16px;
+      }
+
+      .filters {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .btn, .upload-label {
+        width: 100%;
+        text-align: center;
+      }
+
+      .top-actions {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 <body>
-  <div class="bg-glow glow1"></div>
-  <div class="bg-glow glow2"></div>
-  <div class="bg-glow glow3"></div>
+  <div class="app">
+    <div class="hero">
+      <h1>Little Me</h1>
+      <p>một phiên bản dịu dàng hơn của bạn đây ☁️</p>
+    </div>
 
-  <div class="wrap">
-
-    <!-- HOME -->
-    <section class="hero" id="homeSection">
-      <div class="card">
-        <div class="little-icon">📷</div>
-        <h1>Little Me</h1>
-        <div class="sub">
-          phiên bản dịu dàng hơn của bạn đây
-        </div>
-
-        <button class="main-btn" onclick="document.getElementById('uploadInput').click()">
-          Tải ảnh lên
-        </button>
-        <input type="file" id="uploadInput" accept="image/*" class="hidden" />
-
-        <div class="tiny-note">
-          bạn sẽ nhìn thấy mình<br>
-          đáng yêu hơn một chút ☁️
-        </div>
-      </div>
-    </section>
-
-    <!-- EDITOR -->
-    <section class="editor-section hidden" id="editorSection">
-      <div class="top-head">
-        <h2>Chọn mood cho ảnh của bạn</h2>
-        <p>
-          xinh một chút, đáng yêu một chút
-        </p>
+    <div class="main-card">
+      <div class="top-actions">
+        <label for="upload" class="upload-label">Tải ảnh lên</label>
+        <input type="file" id="upload" accept="image/*" />
+        <button class="btn" id="downloadBtn">Lưu ảnh</button>
+        <button class="btn" id="resetBtn">Reset nhẹ</button>
       </div>
 
-      <div class="editor-grid">
-        <!-- PREVIEW -->
+      <div class="editor-layout">
         <div class="preview-card">
-          <div class="canvas-wrap">
-            <canvas id="canvas"></canvas>
-            <div class="placeholder" id="placeholderText">
-              tải một tấm ảnh lên để bắt đầu nhe ✨
+          <div class="preview-wrap">
+            <div class="placeholder" id="placeholder">
+              Tải một tấm ảnh thật xinh lên nè ✨<br />
+              rồi chọn filter đúng gu của bạn
             </div>
-          </div>
-
-          <div class="loading-box" id="loadingBox">
-            đang làm bạn đáng yêu hơn một chút...
-          </div>
-
-          <div class="action-row">
-            <button class="action-btn" onclick="downloadImage()">Lưu ảnh</button>
-            <button class="action-btn" onclick="applyCurrentMode()">Thử kiểu khác</button>
-            <button class="action-btn" onclick="document.getElementById('uploadInput').click()">Tải ảnh khác</button>
-          </div>
-
-          <div class="tiny-note">
-            “phiên bản dịu dàng hơn của bạn đây”
+            <canvas id="canvas"></canvas>
           </div>
         </div>
-
-        <!-- SIDE -->
-        <div class="side-card">
-          <div class="mode-title" style="font-size:1.1rem; margin-bottom:10px;">Chọn mode</div>
-
-          <div class="modes">
-            <button class="mode-card active" data-mode="sticker" onclick="selectMode('sticker', this)">
-              <div class="mode-icon">🎀</div>
-              <div class="mode-title">Sticker</div>
-              <div class="mode-desc">thêm chút đáng yêu vào ảnh của bạn</div>
-            </button>
-
-            <button class="mode-card" data-mode="booth" onclick="selectMode('booth', this)">
-              <div class="mode-icon">📷</div>
-              <div class="mode-title">Photo Booth</div>
-              <div class="mode-desc">khung ảnh photobooth</div>
-            </button>
-
-            <button class="mode-card" data-mode="dream" onclick="selectMode('dream', this)">
-              <div class="mode-icon">☁️</div>
-              <div class="mode-title">Dream Frame</div>
-              <div class="mode-desc">đặt bạn vào một khung cảnh mới nè</div>
-           button>
-
-            <button class="mode-card" data-mode="soft" onclick="selectMode('soft', this)">
-              <div class="mode-icon">🫧</div>
-              <div class="mode-title">Soft Filter</div>
-              <div class="mode-desc">mềm hơn, trong hơn, dreamy hơn</div>
-            </button>
+        <div class="panel">
+          <div class="section-title">Bộ lọc ảnh</div>
+          <div class="filters">
+            <button class="filter-btn active" data-filter="original">Original</button>
+            <button class="filter-btn" data-filter="dreamy">Dreamy</button>
+            <button class="filter-btn" data-filter="soft">Soft</button>
+            <button class="filter-btn" data-filter="oldmoney">Old Money</button>
+            <button class="filter-btn" data-filter="sunset">Sunset</button>
+            <button class="filter-btn" data-filter="cool">Cool Air</button>
           </div>
 
-          <button class="soft-btn" onclick="applyCurrentMode()">Tạo lại ảnh</button>
+          <div class="section-title">Chỉnh nhẹ cho xinh</div>
 
-          <div class="tiny-note">
-            sticker sẽ được giữ ở mức vừa đủ để ảnh vẫn xinh.
+          <div class="slider-group">
+            <div class="slider-top"><span>Độ sáng</span><span id="brightnessVal">100</span></div>
+            <input type="range" id="brightness" min="70" max="140" value="100" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-top"><span>Mềm ảnh</span><span id="blurVal">0</span></div>
+            <input type="range" id="blur" min="0" max="4" value="0" step="0.1" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-top"><span>Pastel</span><span id="pastelVal">0</span></div>
+            <input type="range" id="pastel" min="0" max="60" value="0" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-top"><span>Glow</span><span id="glowVal">0</span></div>
+            <input type="range" id="glow" min="0" max="40" value="0" />
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-top"><span>Ấm màu</span><span id="warmthVal">0</span></div>
+            <input type="range" id="warmth" min="-30" max="40" value="0" />
+          </div>
+
+          <div class="small-note">
+            Không cần quá nhiều hiệu ứng.<br>
+            <b>“ừm… mình cũng xinh phết.”</b>
+          </div>
         </div>
       </div>
+    </div>
 
-      <div class="footer-note">
-        made by Seri 💋
-      </div>
-    </section>
+    <div class="footer">made by Seri 💋</div>
   </div>
 
   <script>
-    const uploadInput = document.getElementById("uploadInput");
-    const homeSection = document.getElementById("homeSection");
-    const editorSection = document.getElementById("editorSection");
+    const upload = document.getElementById("upload");
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
-    const placeholderText = document.getElementById("placeholderText");
-    const loadingBox = document.getElementById("loadingBox");
+    const placeholder = document.getElementById("placeholder");
 
-    let uploadedImage = null;
-    let currentMode = "sticker";
+    const downloadBtn = document.getElementById("downloadBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const filterBtns = document.querySelectorAll(".filter-btn");
 
-    uploadInput.addEventListener("change", handleUpload);
+    const brightness = document.getElementById("brightness");
+    const blur = document.getElementById("blur");
+    const pastel = document.getElementById("pastel");
+    const glow = document.getElementById("glow");
+    const warmth = document.getElementById("warmth");
 
-    function handleUpload(e) {
+    const brightnessVal = document.getElementById("brightnessVal");
+    const blurVal = document.getElementById("blurVal");
+    const pastelVal = document.getElementById("pastelVal");
+    const glowVal = document.getElementById("glowVal");
+    const warmthVal = document.getElementById("warmthVal");
+
+    let img = new Image();
+    let currentFilter = "original";
+    let imageLoaded = false;
+
+    const filterPresets = {
+      original: { brightness: 100, contrast: 100, saturate: 100, sepia: 0, hue: 0 },
+      dreamy:   { brightness: 108, contrast: 95,  saturate: 108, sepia: 8, hue: 0 },
+      soft:     { brightness: 105, contrast: 92,  saturate: 95,  sepia: 6, hue: 0 },
+      oldmoney: { brightness: 98,  contrast: 102, saturate: 85,  sepia: 22, hue: -5 },
+      sunset:   { brightness: 106, contrast: 100, saturate: 115, sepia: 18, hue: -10 },
+      cool:     { brightness: 102, contrast: 96,  saturate: 92,  sepia: 0, hue: 8 }
+    };
+
+    upload.addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (!file) return;
 
       const reader = new FileReader();
       reader.onload = function(event) {
-        const img = new Image();
         img.onload = function() {
-          uploadedImage = img;
-          homeSection.classList.add("hidden");
-          editorSection.classList.remove("hidden");
-          placeholderText.style.display = "none";
-          setupCanvas(img);
-          applyCurrentMode();
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          imageLoaded = true;
+          placeholder.style.display = "none";
+          canvas.style.display = "block";
+
+         const maxWidth = 900;
+          const maxHeight = 1100;
+          let w = img.width;
+          let h = img.height;
+
+          if (w > maxWidth) {
+            h *= maxWidth / w;
+            w = maxWidth;
+          }
+
+          if (h > maxHeight) {
+            w *= maxHeight / h;
+            h = maxHeight;
+          }
+
+          canvas.width = w;
+          canvas.height = h;
+
+          drawImage();
         };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
-    }
+    });
 
-    function setupCanvas(img) {
-      const maxW = 900;
-      const maxH = 1100;
-      let w = img.width;
-      let h = img.height;
+    filterBtns.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterBtns.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        if (imageLoaded) drawImage();
+      });
+    });
 
-      const scale = Math.min(maxW / w, maxH / h, 1);
-      w *= scale;
-      h *= scale;
+    [brightness, blur, pastel, glow, warmth].forEach(input => {
+      input.addEventListener("input", () => {
+        brightnessVal.textContent = brightness.value;
+        blurVal.textContent = blur.value;
+        pastelVal.textContent = pastel.value;
+        glowVal.textContent = glow.value;
+        warmthVal.textContent = warmth.value;
+        if (imageLoaded) drawImage();
+      });
+    });
 
-      canvas.width = w;
-      canvas.height = h;
-    }
+    function drawImage() {
+      if (!imageLoaded) return;
 
-    function selectMode(mode, btn) {
-      currentMode = mode;
-      document.querySelectorAll(".mode-card").forEach(card => card.classList.remove("active"));
-      btn.classList.add("active");
+      const preset = filterPresets[currentFilter];
 
-      if (uploadedImage) {
-        applyCurrentMode();
-      }
-    }
-
-    function applyCurrentMode() {
-      if (!uploadedImage) return;
-
-      loadingBox.classList.add("show");
-
-      setTimeout(() => {
-        drawBaseImage();
-
-        if (currentMode === "sticker") applyStickerMode();
-        if (currentMode === "booth") applyPhotoBoothMode();
-        if (currentMode === "dream") applyDreamFrameMode();
-        if (currentMode === "soft") applySoftFilterMode();
-
-        loadingBox.classList.remove("show");
-      }, 450);
-    }
-
-    function drawBaseImage() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.save();
 
-      const radius = 34;
-      roundRect(ctx, 0, 0, canvas.width, canvas.height, radius);
-      ctx.clip();
-      ctx.drawImage(uploadedImage, 0, 0, canvas.width, canvas.height);
-      ctx.restore();
-    }
+      ctx.filter = `
+        brightness(${(preset.brightness * brightness.value / 100)}%)
+        contrast(${preset.contrast}%)
+        saturate(${preset.saturate + pastel.value * 0.6}%)
+        sepia(${preset.sepia + Math.max(0, warmth.value * 0.6)}%)
+        hue-rotate(${preset.hue + warmth.value * 0.5}deg)
+        blur(${blur.value}px)
+      `;
 
-    function applyStickerMode() {
-      // soft overlay
-      ctx.fillStyle = "rgba(255, 240, 248, 0.10)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      // blush
-      ctx.fillStyle = "rgba(255, 168, 196, 0.20)";
-      ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.32, canvas.height * 0.60, 38, 20, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.68, canvas.height * 0.60, 38, 20, 0, 0, Math.PI * 2);
-      ctx.fill();
-
-      // bunny ears
-      drawText("🐰", canvas.width * 0.18, canvas.height * 0.12, 56);
-      drawText("🐰", canvas.width * 0.72, canvas.height * 0.12, 56);
-
-      // bow
-      drawText("🎀", canvas.width * 0.43, canvas.height * 0.06, 48);
-
-      // stars / hearts / clouds
-      const stickers = ["✨", "💗", "☁️", "🌙", "🫧", "⭐"];
-      for (let i = 0; i < 12; i++) {
-        const emoji = stickers[Math.floor(Math.random() * stickers.length)];
-        const x = Math.random() * (canvas.width - 50) + 10;
-        const y = Math.random() * (canvas.height - 50) + 10;
-        const size = Math.random() * 18 + 20;
-        drawText(emoji, x, y, size);
+      // pastel overlay
+      if (Number(pastel.value) > 0) {
+        ctx.fillStyle = `rgba(255, 235, 240, ${pastel.value / 300})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      // cat whiskers
-      ctx.strokeStyle = "rgba(255,255,255,0.78)";
-      ctx.lineWidth = 2;
-      whiskers(canvas.width * 0.37, canvas.height * 0.58, -1);
-      whiskers(canvas.width * 0.63, canvas.height * 0.58, 1);
-    }
-
-    function whiskers(x, y, dir) {
-      ctx.beginPath();
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + 30 * dir, y - 8);
-      ctx.moveTo(x, y + 10);
-      ctx.lineTo(x + 30 * dir, y + 10);
-      ctx.moveTo(x, y + 20);
-      ctx.lineTo(x + 30 * dir, y + 28);
-      ctx.stroke();
-    }
-
-    function applyPhotoBoothMode() {
-      // white border
-      ctx.save();
-      ctx.fillStyle = "rgba(255,255,255,0.90)";
-      roundRect(ctx, 18, 18, canvas.width - 36, canvas.height - 36, 24);
-      ctx.strokeStyle = "rgba(255,255,255,0.75)";
-      ctx.lineWidth = 8;
-      ctx.stroke();
-      ctx.restore();
-
-      // booth strips
-      ctx.strokeStyle = "rgba(255,255,255,0.95)";
-      ctx.lineWidth = 10;
-      ctx.beginPath();
-      ctx.moveTo(canvas.width * 0.5, 30);
-      ctx.lineTo(canvas.width * 0.5, canvas.height - 30);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(30, canvas.height * 0.5);
-      ctx.lineTo(canvas.width - 30, canvas.height * 0.5);
-      ctx.stroke();
-
-      // tiny stickers
-      drawText("🎀", canvas.width * 0.07, canvas.height * 0.06, 34);
-      drawText("✨", canvas.width * 0.85, canvas.height * 0.07, 28);
-      drawText("💌", canvas.width * 0.08, canvas.height * 0.88, 28);
-      drawText("☁️", canvas.width * 0.83, canvas.height * 0.88, 32);
-
-      // caption
-    ctx.fillStyle = "rgba(255,255,255,0.95)";
-      ctx.fillRect(canvas.width * 0.25, canvas.height - 56, canvas.width * 0.5, 34);
-      ctx.fillStyle = "#8b8190";
-      ctx.font = "bold 16px Segoe UI";
-      ctx.textAlign = "center";
-      ctx.fillText("Little Me", canvas.width / 2, canvas.height - 33);
-    }
-
-    function applyDreamFrameMode() {
-      // dreamy overlay
-      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      grad.addColorStop(0, "rgba(220, 235, 255, 0.24)");
-      grad.addColorStop(0.5, "rgba(255, 242, 249, 0.18)");
-      grad.addColorStop(1, "rgba(255, 236, 216, 0.16)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // sun glow
-      const sun = ctx.createRadialGradient(canvas.width * 0.82, canvas.height * 0.18, 10, canvas.width * 0.82, canvas.height * 0.18, 120);
-      sun.addColorStop(0, "rgba(255, 247, 220, 0.95)");
-      sun.addColorStop(1, "rgba(255, 247, 220, 0)");
-      ctx.fillStyle = sun;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // clouds
-      for (let i = 0; i < 6; i++) {
-        drawCloud(Math.random() * canvas.width, Math.random() * canvas.height * 0.35 + 20, Math.random() * 0.6 + 0.8);
+      // glow overlay
+      if (Number(glow.value) > 0) {
+        const gradient = ctx.createRadialGradient(
+          canvas.width / 2,
+          canvas.height / 2,
+          canvas.width * 0.1,
+          canvas.width / 2,
+          canvas.height / 2,
+          canvas.width * 0.7
+        );
+        gradient.addColorStop(0, `rgba(255,255,255,${glow.value / 220})`);
+        gradient.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
 
-      // window frame
-      ctx.strokeStyle = "rgba(255,255,255,0.78)";
-      ctx.lineWidth = 8;
-      roundRect(ctx, 20, 20, canvas.width - 40, canvas.height - 40, 26);
-      ctx.stroke();
-
-      ctx.beginPath();
-      ctx.moveTo(canvas.width * 0.5, 40);
-      ctx.lineTo(canvas.width * 0.5, canvas.height - 40);
-      ctx.moveTo(40, canvas.height * 0.5);
-      ctx.lineTo(canvas.width - 40, canvas.height * 0.5);
-      ctx.stroke();
-
-      drawText("☁️", canvas.width * 0.08, canvas.height * 0.08, 30);
-      drawText("🌷", canvas.width * 0.84, canvas.height * 0.88, 28);
+      // soft grain
+      addSoftTexture();
     }
 
-    function drawCloud(x, y, scale = 1) {
-      ctx.save();
-      ctx.globalAlpha = 0.55;
-      ctx.fillStyle = "#ffffff";
-      ctx.beginPath();
-      ctx.arc(x, y, 22 * scale, Math.PI * 0.5, Math.PI * 1.5);
-      ctx.arc(x + 22 * scale, y - 14 * scale, 22 * scale, Math.PI, Math.PI * 2);
-      ctx.arc(x + 48 * scale, y, 22 * scale, Math.PI * 1.5, Math.PI * 0.5);
-      ctx.arc(x + 22 * scale, y + 12 * scale, 28 * scale, 0, Math.PI);
-      ctx.closePath();
-      ctx.fill();
-      ctx.restore();
-    }
-
-    function applySoftFilterMode() {
-      // bright wash
-      ctx.fillStyle = "rgba(255,255,255,0.10)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // pink/blue gradient
-      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      grad.addColorStop(0, "rgba(255, 223, 239, 0.14)");
-      grad.addColorStop(1, "rgba(218, 235, 255, 0.14)");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // dreamy blur circles
-      for (let i = 0; i < 9; i++) {
+    function addSoftTexture() {
+      for (let i = 0; i < 300; i++) {
         const x = Math.random() * canvas.width;
         const y = Math.random() * canvas.height;
-        const r = Math.random() * 45 + 18;
-        const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-        g.addColorStop(0, "rgba(255,255,255,0.20)");
-        g.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
-        ctx.fill();
+        const alpha = Math.random() * 0.03;
+        ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+        ctx.fillRect(x, y, 1.2, 1.2);
+      }
+    }
+
+    resetBtn.addEventListener("click", () => {
+      brightness.value = 100;
+      blur.value = 0;
+      pastel.value = 0;
+      glow.value = 0;
+      warmth.value = 0;
+      brightnessVal.textContent = 100;
+      blurVal.textContent = 0;
+      pastelVal.textContent = 0;
+      glowVal.textContent = 0;
+      warmthVal.textContent = 0;
+      currentFilter = "original";
+
+      filterBtns.forEach(b => b.classList.remove("active"));
+      document.querySelector('[data-filter="original"]').classList.add("active");
+
+      if (imageLoaded) drawImage();
+    });
+
+    downloadBtn.addEventListener("click", () => {
+      if (!imageLoaded) {
+        alert("Tải ảnh lên trước đã nè ✨");
+        return;
       }
 
-      drawText("🫧", canvas.width * 0.10, canvas.height * 0.10, 28);
-      drawText("✨", canvas.width * 0.84, canvas.height * 0.12, 24);
-      drawText("☁️", canvas.width * 0.78, canvas.height * 0.84, 26);
-    }
-
-    function drawText(text, x, y, size) {
-      ctx.font = `${size}px Segoe UI Emoji, Apple Color Emoji, sans-serif`;
-      ctx.fillText(text, x, y);
-  }
-
-    function roundRect(ctx, x, y, width, height, radius) {
-      ctx.beginPath();
-      ctx.moveTo(x + radius, y);
-      ctx.lineTo(x + width - radius, y);
-      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-      ctx.lineTo(x + width, y + height - radius);
-      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-      ctx.lineTo(x + radius, y + height);
-      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-      ctx.lineTo(x, y + radius);
-      ctx.quadraticCurveTo(x, y, x + radius, y);
-      ctx.closePath();
-    }
-
-    function downloadImage() {
-      if (!uploadedImage) return;
       const link = document.createElement("a");
       link.download = "little-me-by-seri.png";
       link.href = canvas.toDataURL("image/png");
       link.click();
-    }
+    });
   </script>
 </body>
 </html>
-      

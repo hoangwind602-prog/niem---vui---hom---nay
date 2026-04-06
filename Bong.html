@@ -3,172 +3,194 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Blob Lười Của Seri</title>
+<title>Cục Bông Lười</title>
 <style>
+  /* ===== Body & Background ===== */
   body {
     margin: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #e8d9f8, #f8e0f5);
+    background: linear-gradient(135deg, #f3e8ff, #ffe8f0);
     font-family: 'Segoe UI', sans-serif;
     overflow: hidden;
   }
 
-  /* Blob chính */
-  .blob {
+  /* ===== Blob ===== */
+  .blob-container {
     position: relative;
-    width: 120px;
-    height: 120px;
+    text-align: center;
+  }
+
+  .blob {
+    width: 130px;
+    height: 130px;
     background-color: #f8f3ff;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1), 0 0 15px rgba(255,255,255,0.5) inset;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.1);
     cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    position: relative;
   }
 
-  /* Hiệu ứng hover / nhún */
-  .blob:hover {
-    transform: scale(1.2) translateY(-5px) rotate(-3deg);
-    box-shadow: 0 12px 25px rgba(0,0,0,0.15), 0 0 20px rgba(255,255,255,0.6) inset;
+  /* Glow hiệu ứng khi chạm */
+  .blob.glow {
+    box-shadow: 0 0 25px 8px rgba(255, 200, 255, 0.6);
+    transform: scale(1.1);
   }
 
   /* Mặt cute */
   .face {
-    position: absolute;
-    width: 80%;
-    height: 80%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    width: 70%;
+    height: 70%;
   }
 
   .eye {
-    width: 10px;
-    height: 10px;
-    background: #333;
-    border-radius: 50%;
-    margin: 0 8px;
-  }
-
-  .eye-row {
-    display: flex;
-    margin-bottom: 5px;
-  }
-
-  .blush {
     width: 12px;
-    height: 6px;
-    background: #ffb6c1;
+    height: 12px;
+    background-color: #333;
     border-radius: 50%;
-    margin: 0 6px;
+    position: absolute;
+    top: 30%;
   }
+
+  .eye.left { left: 20%; }
+  .eye.right { right: 20%; }
 
   .mouth {
     width: 20px;
-    height: 6px;
-    border-radius: 3px;
-    background: #d17b7b;
-    margin-top: 4px;
-  }
-
-  /* Tooltip tên */
-  .tooltip {
+    height: 4px;
+    background-color: #ff6f91;
+    border-radius: 2px;
     position: absolute;
-    bottom: -25px;
-    background: rgba(255,255,255,0.8);
-    padding: 2px 6px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    opacity: 0;
-    transition: opacity 0.2s;
-    pointer-events: none;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  .blob:hover .tooltip {
-    opacity: 1;
+  .blush {
+    width: 14px;
+    height: 8px;
+    background-color: #ffb6c1;
+    border-radius: 50%;
+    position: absolute;
+    top: 40%;
   }
 
-  /* Button nhỏ */
+  .blush.left { left: 10%; }
+  .blush.right { right: 10%; }
+
+  /* Button panel */
   .controls {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    margin-top: 20px;
     display: flex;
-    gap: 10px;
+    justify-content: center;
+    gap: 15px;
   }
 
-  .controls button {
-    padding: 6px 10px;
+  button {
+    padding: 8px 14px;
     border: none;
-    border-radius: 10px;
-    background: #f3e8ff;
+    border-radius: 8px;
+    background-color: #ffe0f0;
     cursor: pointer;
-    transition: background 0.2s;
+    font-weight: 500;
+    transition: 0.2s;
   }
 
-  .controls button:hover {
-    background: #e1d2f7;
+  button:hover {
+    background-color: #ffd0e0;
+  }
+
+  /* Name badge */
+  .name-badge {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff0ff;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    transition: 0.3s;
+    opacity: 0.9;
   }
 </style>
 </head>
 <body>
 
-<div class="blob" id="blob">
-  <div class="face">
-    <div class="eye-row">
-      <div class="eye"></div>
-      <div class="eye"></div>
+<div class="blob-container">
+  <div class="name-badge" id="blobName">Cục Bông</div>
+  <div class="blob" id="blob">
+    <div class="face">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth"></div>
+      <div class="blush left"></div>
+      <div class="blush right"></div>
     </div>
-    <div class="blush-row">
-      <div class="blush"></div>
-      <div class="blush"></div>
-    </div>
-    <div class="mouth"></div>
   </div>
-  <div class="tooltip" id="blobName">Tên của bạn</div>
-</div>
 
-<div class="controls">
-  <button onclick="napChăn()">Đắp chăn</button>
-  <button onclick="changeName()">Đổi tên</button>
+  <div class="controls">
+    <button onclick="makeSleep()">Ngủ / Đắp chăn</button>
+    <button onclick="changeName()">Đổi tên</button>
+  </div>
 </div>
 
 <script>
   const blob = document.getElementById('blob');
   const blobName = document.getElementById('blobName');
 
-  // Spawn animation nhún nhẹ liên tục
-  setInterval(() => {
-      const randomMove = (Math.random() - 0.5) * 4; 
-    blob.style.transform = `scale(1.1) translateY(${randomMove}px) rotate(${randomMove}deg)`;
-  }, 1500);
+  // Hiệu ứng glow & pop khi click
+  blob.addEventListener('click', () => {
+    blob.classList.add('glow');
+    setTimeout(() => blob.classList.remove('glow'), 300);
+    playPopSound();
+  });
 
-  // Đắp chăn
-  function napChăn() {
-    blob.style.background = '#e2d4ff';
-    blobName.innerText = "ZZZ... Đang ngủ";
+  // Nhún & lăn theo kéo chuột (basic)
+  let isDragging = false;
+
+  blob.addEventListener('mousedown', () => { isDragging = true; });
+  document.addEventListener('mouseup', () => { isDragging = false; });
+  document.addEventListener('mousemove', (e) => {
+    if(isDragging){
+      blob.style.position = 'absolute';
+      blob.style.left = (e.pageX - 65) + 'px';
+      blob.style.top = (e.pageY - 65) + 'px';
+    }
+  });
+
+  // Chế độ ngủ
+  function makeSleep(){
+    blob.style.transform = 'scale(0.9)';
+    blob.style.opacity = '0.7';
+    blobName.textContent = blobName.textContent + " 😴";
+    setTimeout(() => {
+      blob.style.transform = 'scale(1)';
+      blob.style.opacity = '1';
+      blobName.textContent = blobName.textContent.replace(' 😴','');
+    }, 1500);
   }
 
   // Đổi tên
-  function changeName() {
-    const newName = prompt("Đặt tên cho cục bông của bạn:");
-    if(newName) blobName.innerText = newName;
+  function changeName(){
+    const newName = prompt("Đặt tên cho cục bông của bạn:", blobName.textContent);
+    if(newName) blobName.textContent = newName;
   }
 
-  // Click / Pop
-  blob.addEventListener('click', () => {
-    blob.animate([
-      { transform: 'scale(1.2)' },
-      { transform: 'scale(0.9)' },
-      { transform: 'scale(1.1)' }
-    ], { duration: 200, easing: 'ease-out' });
-  });
+  // Âm thanh pop
+  function playPopSound(){
+    const audio = new Audio('https://freesound.org/data/previews/331/331912_3248244-lq.mp3');
+    audio.volume = 0.2;
+    audio.play();
+  }
 </script>
 
 </body>

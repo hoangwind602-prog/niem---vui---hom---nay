@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pop Pop by Seri</title>
+  <title>Pop Pop</title>
 
   <style>
     * {
@@ -15,7 +15,7 @@
       margin: 0;
       overflow: hidden;
       font-family: "Segoe UI", sans-serif;
-      background: radial-gradient(circle at top, #4a4069 0%, #2a243d 42%, #171321 100%);
+      background: radial-gradient(circle at top, #3d3556 0%, #1f1b2e 45%, #12101d 100%);
       height: 100vh;
       touch-action: manipulation;
       user-select: none;
@@ -23,33 +23,7 @@
       color: white;
     }
 
-    .glow-bg {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      background: rgba(255, 190, 220, 0.08);
-      filter: blur(80px);
-      z-index: 0;
-      animation: drift 10s ease-in-out infinite alternate;
-    }
-
-    .glow-bg.one {
-      top: -80px;
-      left: -50px;
-    }
-
-    .glow-bg.two {
-      bottom: -100px;
-      right: -60px;
-      background: rgba(180, 210, 255, 0.08);
-      animation-delay: 2s;
-    }
-
-    @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(30px, -20px) scale(1.1); }
-    }
+    .hidden { display: none !important; }
 
     .star {
       position: absolute;
@@ -63,10 +37,10 @@
 
     @keyframes twinkle {
       0%, 100% { opacity: 0.2; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.8); }
+      50% { opacity: 1; transform: scale(1.6); }
     }
 
-    .intro-screen, .ready-screen {
+    .intro-screen, .ready-screen, .game-over-screen, .gift-screen, .collection-screen {
       position: absolute;
       inset: 0;
       display: flex;
@@ -74,70 +48,57 @@
       justify-content: center;
       padding: 24px;
       z-index: 100;
-      background: radial-gradient(circle at top, rgba(255,255,255,0.05), rgba(0,0,0,0.18));
-      backdrop-filter: blur(8px);
+      background: radial-gradient(circle at top, rgba(255,255,255,0.05), rgba(0,0,0,0.22));
+      backdrop-filter: blur(7px);
     }
 
     .intro-card {
       width: 100%;
-      max-width: 390px;
-      padding: 36px 26px;
+      max-width: 400px;
+      padding: 34px 26px;
       border-radius: 30px;
       background: rgba(255,255,255,0.10);
       border: 1px solid rgba(255,255,255,0.14);
       box-shadow: 0 18px 40px rgba(0,0,0,0.25);
       text-align: center;
-      animation: fadeUp 0.8s ease;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
+      max-height: 88vh;
+      overflow-y: auto;
     }
 
     .intro-title {
-      font-size: 2.3rem;
+      font-size: 2.2rem;
       font-weight: 800;
       margin-bottom: 12px;
       letter-spacing: 1px;
-      text-shadow: 0 0 18px rgba(255,255,255,0.15);
+      text-shadow: 0 0 12px rgba(255,255,255,0.15);
     }
 
     .intro-text {
       font-size: 1rem;
-      line-height: 1.75;
+      line-height: 1.7;
       opacity: 0.92;
       margin-bottom: 20px;
-    }
-
-    .quote-line {
-      font-size: 0.92rem;
-      opacity: 0.7;
-      font-style: italic;
-      margin-bottom: 28px;
     }
 
     .intro-btn {
       border: none;
       border-radius: 999px;
-      padding: 14px 28px;
+      padding: 14px 22px;
       font-size: 1rem;
       font-weight: 700;
-      background: linear-gradient(135deg, rgba(255,255,255,0.24), rgba(255,255,255,0.14));
+      background: rgba(255,255,255,0.20);
       color: white;
       cursor: pointer;
       backdrop-filter: blur(10px);
       box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-      transition: 0.25s ease;
+      transition: 0.2s ease;
+      margin-top: 10px;
+      margin-inline: 5px;
     }
 
     .intro-btn:hover {
-      transform: scale(1.06);
-      background: linear-gradient(135deg, rgba(255,255,255,0.32), rgba(255,255,255,0.18));
-    }
-
-    .hidden {
-      display: none !important;
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.28);
     }
 
     .top-ui {
@@ -152,66 +113,111 @@
 
     .title {
       font-size: 2rem;
-      font-weight: 800;
+      font-weight: 700;
       letter-spacing: 1px;
       margin-bottom: 6px;
-      text-shadow: 0 0 16px rgba(255,255,255,0.18);
+      text-shadow: 0 0 12px rgba(255,255,255,0.15);
     }
 
     .subtitle {
       font-size: 0.95rem;
-      opacity: 0.82;
+      opacity: 0.8;
+    }
+
+    .score-board, .danger-board, .best-board, .combo-board {
+      position: absolute;
+      z-index: 20;
+      padding: 10px 14px;
+      border-radius: 18px;
+      backdrop-filter: blur(8px);
+      font-weight: 600;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+      font-size: 0.95rem;
     }
 
     .score-board {
-      position: absolute;
-      top: 22px;
-      right: 16px;
-      z-index: 20;
+      top: 24px;
+      right: 18px;
       background: rgba(255,255,255,0.12);
-      padding: 10px 16px;
-      border-radius: 18px;
-      backdrop-filter: blur(8px);
-      font-weight: 700;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+    }
+
+    .danger-board {
+      top: 24px;
+      left: 18px;
+      background: rgba(255, 126, 126, 0.18);
+    }
+
+    .best-board {
+      top: 76px;
+      right: 18px;
+      background: rgba(255,255,255,0.10);
     }
 
     .combo-board {
-      position: absolute;
-      top: 22px;
-      left: 16px;
-      z-index: 20;
-      background: rgba(255,255,255,0.10);
-      padding: 10px 16px;
-      border-radius: 18px;
-      backdrop-filter: blur(8px);
-      font-weight: 700;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-      opacity: 0.9;
+      top: 76px;
+      left: 18px;
+      background: rgba(255, 214, 112, 0.18);
+      opacity: 0;
+      transform: scale(0.9);
+      transition: 0.25s ease;
     }
 
-    .restart-btn {
+    .combo-board.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .message-box {
       position: absolute;
-      bottom: 24px;
+      top: 128px;
       left: 50%;
       transform: translateX(-50%);
+      z-index: 30;
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+      opacity: 0;
+      transition: 0.3s ease;
+      max-width: 84%;
+      text-align: center;
+    }
+
+    .message-box.show {
+      opacity: 1;
+    }
+
+    .restart-btn, .collection-btn {
+      position: absolute;
+      bottom: 24px;
       z-index: 20;
       border: none;
       border-radius: 999px;
-      padding: 14px 26px;
+      padding: 14px 20px;
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 600;
       background: rgba(255,255,255,0.18);
       color: white;
       backdrop-filter: blur(10px);
       cursor: pointer;
       box-shadow: 0 10px 24px rgba(0,0,0,0.18);
-      transition: 0.25s ease;
+      transition: 0.2s ease;
     }
 
-    .restart-btn:hover {
-      transform: translateX(-50%) scale(1.05);
-      background: rgba(255,255,255,0.25);
+    .restart-btn {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .collection-btn {
+      right: 18px;
+      bottom: 86px;
+      font-size: 0.95rem;
+      padding: 12px 16px;
     }
 
     .game-area {
@@ -221,48 +227,65 @@
       overflow: hidden;
     }
 
-    .mochi {
+    .mochi, .danger, .fake-danger {
       position: absolute;
-      width: 74px;
-      height: 74px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: transform 0.08s ease, filter 0.2s ease;
-      box-shadow:
-        inset -6px -8px 12px rgba(255,255,255,0.28),
-        inset 6px 8px 12px rgba(0,0,0,0.05),
-        0 12px 22px rgba(0,0,0,0.18);
+      transition: transform 0.08s ease;
       animation: floaty 4s ease-in-out infinite;
+      user-select: none;
     }
 
-    .mochi:hover {
-      filter: brightness(1.04);
+    .mochi, .fake-danger {
+      box-shadow:
+        inset -10px -12px 18px rgba(255,255,255,0.34),
+        inset 8px 10px 14px rgba(0,0,0,0.04),
+        0 16px 28px rgba(0,0,0,0.16);
     }
 
-    .mochi:active {
-      transform: scale(0.88);
+    .danger {
+      background: radial-gradient(circle at 30% 30%, #fff1f1, #ff8b8b 58%, #d53d5e 100%);
+      box-shadow:
+        inset -8px -10px 16px rgba(255,255,255,0.28),
+        inset 8px 10px 14px rgba(0,0,0,0.08),
+        0 16px 28px rgba(0,0,0,0.22),
+        0 0 18px rgba(255, 80, 110, 0.28);
+      font-size: 1.6rem;
+    }
+
+    .fake-danger {
+      background: radial-gradient(circle at 32% 28%, #fff9fc, #ffd6ea 58%, #f2a9ca 100%);
+      box-shadow:
+        inset -10px -12px 18px rgba(255,255,255,0.30),
+        inset 8px 10px 14px rgba(0,0,0,0.05),
+        0 16px 28px rgba(0,0,0,0.18),
+        0 0 10px rgba(255, 95, 145, 0.15);
+    }
+
+    .mochi:active, .danger:active, .fake-danger:active {
+      transform: scale(0.86);
     }
 
     @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-12px) rotate(1deg); }
     }
 
     .female {
-      background: radial-gradient(circle at 30% 30%, #fff6fb, #f7cfe0 70%, #efb6cf 100%);
+      background: radial-gradient(circle at 32% 28%, #fff9fc, #ffd6ea 58%, #f6b9d4 100%);
     }
 
     .male {
-      background: radial-gradient(circle at 30% 30%, #f8fcff, #cfe4f2 70%, #b7d2e6 100%);
+      background: radial-gradient(circle at 32% 28%, #fcfeff, #d9ecf7 58%, #bcd8ea 100%);
     }
 
     .face {
       position: relative;
-      width: 40px;
-      height: 28px;
+      width: 42px;
+      height: 30px;
     }
 
     .eye {
@@ -271,23 +294,23 @@
       height: 9px;
       background: #3b3246;
       border-radius: 50%;
-      top: 6px;
+      top: 7px;
     }
 
-    .eye.left { left: 9px; }
-    .eye.right { right: 9px; }
+    .eye.left { left: 10px; }
+    .eye.right { right: 10px; }
 
     .blush {
       position: absolute;
-      width: 8px;
+      width: 9px;
       height: 5px;
-      background: rgba(255, 145, 170, 0.35);
+      background: rgba(255, 145, 170, 0.30);
       border-radius: 50%;
-      top: 14px;
+      top: 16px;
     }
 
-    .blush.left { left: 2px; }
-    .blush.right { right: 2px; }
+    .blush.left { left: 1px; }
+    .blush.right { right: 1px; }
 
     .mouth {
       position: absolute;
@@ -300,57 +323,61 @@
       bottom: 2px;
     }
 
-    .mouth.flat {
-      border-bottom: none;
-      border-top: 2px solid #5b4b5d;
+    .evil-mouth {
+      position: absolute;
+      width: 12px;
+      height: 6px;
+      border-top: 2px solid #6a304d;
       border-radius: 10px 10px 0 0;
-      bottom: 4px;
-      height: 3px;
-    }
-
-    .mouth.o {
-      width: 8px;
-      height: 8px;
-      border: 2px solid #5b4b5d;
-      border-radius: 50%;
-      border-bottom: 2px solid #5b4b5d;
-      background: transparent;
-      bottom: 1px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-4deg);
+      bottom: 2px;
     }
 
     .female::before {
-      content: "";
+      content: "🎀";
       position: absolute;
-      top: -8px;
-      width: 20px;
-      height: 12px;
-      background: #f3a8c4;
-      border-radius: 12px 12px 6px 6px;
+      top: -14px;
       left: 50%;
       transform: translateX(-50%);
-      box-shadow: -12px 4px 0 -4px #f3a8c4, 12px 4px 0 -4px #f3a8c4;
+      font-size: 20px;
     }
 
     .male::before {
       content: "";
       position: absolute;
-      top: -6px;
-      width: 16px;
-      height: 12px;
+      top: -7px;
+      width: 18px;
+      height: 13px;
       background: #9fc2d9;
       border-radius: 50% 50% 40% 40%;
       left: 50%;
       transform: translateX(-50%) rotate(-8deg);
     }
 
-    .pop {
-      animation: popOut 0.22s ease forwards;
+    .fake-danger::before {
+      content: "🎀";
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%) rotate(-12deg);
+      font-size: 20px;
+      opacity: 0.92;
+    }
+
+    .pop { animation: popOut 0.24s ease forwards; }
+    .squish { animation: squish 0.16s ease; }
+
+    @keyframes squish {
+      0% { transform: scale(1); }
+      50% { transform: scale(0.84, 1.08); }
+      100% { transform: scale(1); }
     }
 
     @keyframes popOut {
       0% { transform: scale(1); opacity: 1; }
-      40% { transform: scale(0.82); }
-      100% { transform: scale(1.35); opacity: 0; }
+      35% { transform: scale(0.78, 1.08); }
+      100% { transform: scale(1.25); opacity: 0; }
     }
 
     .particle {
@@ -363,21 +390,15 @@
     }
 
     @keyframes burst {
-      0% {
-        transform: translate(0,0) scale(1);
-        opacity: 1;
-      }
-      100% {
-        transform: translate(var(--x), var(--y)) scale(0.4);
-        opacity: 0;
-      }
+      0% { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--x), var(--y)) scale(0.4); opacity: 0; }
     }
 
     .plus-score {
       position: absolute;
       color: #fff;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 700;
       pointer-events: none;
       animation: rise 0.8s ease forwards;
       text-shadow: 0 0 10px rgba(255,255,255,0.4);
@@ -388,84 +409,244 @@
       0% { opacity: 1; transform: translateY(0); }
       100% { opacity: 0; transform: translateY(-30px); }
     }
+
+    .gift-box {
+      font-size: 4rem;
+      margin: 12px 0 18px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .gift-box:hover {
+      transform: scale(1.06) rotate(-3deg);
+    }
+
+    .reward {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      margin-top: 12px;
+      min-height: 68px;
+    }
+
+    .collection-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+      text-align: left;
+    }
+
+    .item-card {
+      background: rgba(255,255,255,0.10);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 18px;
+      padding: 12px;
+      min-height: 88px;
+    }
+
+    .item-emoji {
+      font-size: 1.6rem;
+      margin-bottom: 6px;
+    }
+
+    .small-note {
+      font-size: 0.9rem;
+      opacity: 0.78;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
 
-  <div class="glow-bg one"></div>
-  <div class="glow-bg two"></div>
-
-  <!-- INTRO 1 -->
+  <!-- INTRO -->
   <div class="intro-screen" id="introScreen">
     <div class="intro-card">
       <div class="intro-title">POP POP</div>
       <div class="intro-text">
-        Seri mang đến cho bạn một góc nhỏ để vui tay, dịu đầu và thả lỏng một chút.
+        Seri mang đến cho bạn một góc nhỏ để thư giãn, né drama và nhận mấy món vô tri không giúp gì nhưng dễ chịu.
       </div>
-      <div class="quote-line" id="quoteLine">"Hôm nay không cần cần nhẹ nhàng hơn một chút."</div>
       <button class="intro-btn" onclick="goToReady()">OK, ready</button>
     </div>
   </div>
 
-  <!-- INTRO 2 -->
+  <!-- READY -->
   <div class="ready-screen hidden" id="readyScreen">
     <div class="intro-card">
       <div class="intro-title">Ready?</div>
       <div class="intro-text">
-        Không cần giỏi.<br>
-        Không cần nghĩ quá nhiều.<br>
-        Cứ chill thôi.
+        Có mochi mềm nhưng cũng Có quái giả dạng.<br>
+        Có thể vui. Có thể toang. Đừng để vẻ ngoài đánh lừa
       </div>
       <button class="intro-btn" onclick="startGame()">PLAY</button>
+      <button class="intro-btn" onclick="openCollection()">Tủ đồ</button>
+    </div>
+  </div>
+
+  <!-- GAME OVER -->
+  <div class="game-over-screen hidden" id="gameOverScreen">
+    <div class="intro-card">
+      <div class="intro-title">Toang rồi 😭</div>
+      <div class="intro-text" id="gameOverText">
+        Bạn đã bị mochi dí ngược.
+      </div>
+      <button class="intro-btn" onclick="showGift()">Mở hộp an ủi</button>
+      <button class="intro-btn" onclick="openCollection()">Xem tủ đồ</button>
+    </div>
+  </div>
+
+  <!-- GIFT -->
+  <div class="gift-screen hidden" id="giftScreen">
+    <div class="intro-card">
+      <div class="intro-title">Hộp quà bí ẩn</div>
+      <div class="intro-text">Ấn vào đi. Có thể không đổi đời, nhưng đổi mood.</div>
+      <div class="gift-box" onclick="openGift()" id="giftBox">🎁</div>
+      <div class="reward" id="rewardText">...</div>
+      <button class="intro-btn hidden" id="playAgainBtn" onclick="playAgain()">Chơi lại nè</button>
+      <button class="intro-btn hidden" id="seeCollectionBtn" onclick="openCollection()">Xem tủ đồ</button>
+    </div>
+  </div>
+
+  <!-- COLLECTION -->
+  <div class="collection-screen hidden" id="collectionScreen">
+    <div class="intro-card">
+      <div class="intro-title">Tủ đồ phép thuật</div>
+      <div class="intro-text">
+        Những món bạn từng nhặt được trong lúc đang rất rảnh nhưng có giá trị tinh thần.
+      </div>
+      <div class="collection-grid" id="collectionGrid"></div>
+      <div class="small-note" id="collectionCount">Bạn chưa nhặt được gì cả.</div>
+      <button class="intro-btn" onclick="closeCollection()">Đóng lại</button>
     </div>
   </div>
 
   <!-- GAME UI -->
   <div class="top-ui hidden" id="gameUI">
     <div class="title">Pop Pop</div>
-    <div class="subtitle">Pop cho vui. Pop làm dịu lòng một chút.</div>
+    <div class="subtitle">Cute nhưng không thể trust ai.</div>
   </div>
 
   <div class="score-board hidden" id="scoreBoard">⭐ <span id="score">0</span></div>
-  <div class="combo-board hidden" id="comboBoard">💫 Combo: <span id="combo">0</span></div>
+  <div class="danger-board hidden" id="dangerBoard">☁️ Giới hạn: <span id="limitCount">0</span></div>
+  <div class="best-board hidden" id="bestBoard">🏆 Best: <span id="bestScore">0</span></div>
+  <div class="combo-board hidden" id="comboBoard">🔥 Combo x<span id="comboCount">1</span></div>
+  <div class="message-box" id="messageBox">Bạn đang quá slay.</div>
 
   <div class="game-area" id="gameArea"></div>
 
   <button class="restart-btn hidden" id="restartBtn" onclick="restartGame()">Chơi lại</button>
+  <button class="collection-btn hidden" id="collectionBtn" onclick="openCollection()">🎁 Tủ đồ</button>
 
   <script>
     const gameArea = document.getElementById("gameArea");
     const scoreEl = document.getElementById("score");
-    const comboEl = document.getElementById("combo");
+    const bestScoreEl = document.getElementById("bestScore");
+    const limitCount = document.getElementById("limitCount");
+    const comboCountEl = document.getElementById("comboCount");
+
     const introScreen = document.getElementById("introScreen");
     const readyScreen = document.getElementById("readyScreen");
     const gameUI = document.getElementById("gameUI");
     const scoreBoard = document.getElementById("scoreBoard");
+    const bestBoard = document.getElementById("bestBoard");
+    const dangerBoard = document.getElementById("dangerBoard");
     const comboBoard = document.getElementById("comboBoard");
     const restartBtn = document.getElementById("restartBtn");
-    const quoteLine = document.getElementById("quoteLine");
+    const collectionBtn = document.getElementById("collectionBtn");
+    const messageBox = document.getElementById("messageBox");
+
+    const gameOverScreen = document.getElementById("gameOverScreen");
+    const gameOverText = document.getElementById("gameOverText");
+
+    const giftScreen = document.getElementById("giftScreen");
+    const rewardText = document.getElementById("rewardText");
+    const playAgainBtn = document.getElementById("playAgainBtn");
+    const seeCollectionBtn = document.getElementById("seeCollectionBtn");
+
+    const collectionScreen = document.getElementById("collectionScreen");
+    const collectionGrid = document.getElementById("collectionGrid");
+    const collectionCount = document.getElementById("collectionCount");
 
     let score = 0;
-    let combo = 0;
-    let mochiCount = 14;
-    let starsCreated = false;
-    let comboTimeout;
+    let bestScore = Number(localStorage.getItem("popBestScore")) || 0;
+    let collection = JSON.parse(localStorage.getItem("popCollection")) || [];
 
-    const quotes = [
-      "Hôm nay Chỉ cần nhẹ hơn một chút.",
-      "Một ngày mệt cũng không sao đâu, cố lên.",
-      "Chậm lại một chút cũng là đang sống.",
-      "Thả lỏng vai xuống nhé, vũ trụ không giục ai đâu.",
-      "Pop hết mấy điều linh tinh trong đầu đi."
+    let starsCreated = false;
+    let spawnInterval;
+    let difficultyTimer;
+    let gameRunning = false;
+    let maxObjects = 12;
+
+    let lastPopTime = 0;
+    let fastPopChain = 0;
+    let comboMultiplier = 1;
+
+    const hypeMessages = [
+      "Bạn đang pop như trả nghiệp.",
+      "Ê từ từ thôi game chưa load kịp.",
+      "Bạn đẳng cấp thế này á, game không nhanh bằng bạn.",
+      "Mochi đang run vì bạn.",
+      "Ai cho bạn tay nhanh dữ vậy trời.",
+      "Bóp nữa đi, tụi nó chưa kịp hiểu chuyện gì xảy ra.",
+      "Tay bạn nhanh hơn cả red flag biến mất.",
+      "Game này bắt đầu sợ bạn rồi đấy."
     ];
 
-    quoteLine.textContent = quotes[Math.floor(Math.random() * quotes.length)];
+    const warningMessages = [
+      "Sắp ngộp mochi rồi đó 😭",
+      "Ê ê ê màn hình đang đông dân cư.",
+      "Pop lẹ không tụi nó chiếm đóng luôn đó.",
+      "Bạn đang bị bao vây.",
+      "Không khí đang trở nên mochi.",
+      "Đông quá rồi, thở không nổi rồi má ơi."
+    ];
+
+    const randomEncourage = [
+      "Bạn đang cứu thế giới... khỏi bị yên bình quá.",
+      "Không ai biết bạn đang làm gì, nhưng nó rất quan trọng.",
+      "Một cú pop nhỏ, một bước tiến lớn cho tâm trạng.",
+      "Bạn không rảnh, bạn đang xử lý mochi.",
+      "Căng thì pop. Buồn thì pop. Vui thì cũng pop.",
+      "Bạn đang làm công việc của một chiến binh bất bại.",
+      "Mochi chưa biết bạn đang rất có đẳng cấp."
+    ];
+
+    const gameOverLines = [
+      "Bạn đã bị một đàn mochi thao túng.",
+      "Không sao, ai rồi cũng có lúc thua mấy cục bông.",
+      "Không sao đâu. Chỉ là mochi hôm nay hơi đông.",
+      "Thua keo này thì ta nhận quà.",
+      "Bạn vừa bị áp đảo bởi thứ mềm nhất hệ mặt trời."
+    ];
+
+    const gifts = [
+      { emoji:"🧃", name:"Nước thần kỳ", desc:"Uống vào thấy đời vẫn vậy nhưng dễ chịu hơn." },
+      { emoji:"🍬", name:"Kẹo phép thuật", desc:"Tác dụng: ngọt miệng và quên nhẹ chuyện đời." },
+      { emoji:"🫧", name:"Cục bình tĩnh", desc:"Dùng khi muốn phát điên nhưng vẫn phải dịu dàng." },
+      { emoji:"🧸", name:"Gấu vô tri", desc:"Không giúp gì nhưng trông cũng an ủi." },
+      { emoji:"✨", name:"Lá chắn tinh thần 0.5 giây", desc:"Dùng rất nhanh. Hết cũng rất nhanh." },
+      { emoji:"🌈", name:"Tí dopamine", desc:"Số lượng ít nhưng có còn hơn không." },
+      { emoji:"🥛", name:"Sữa tâm hồn", desc:"Không rõ thành phần nhưng nhìn hiền." },
+      { emoji:"🪄", name:"Que phép hết pin", desc:"Không dùng được nhưng vẫn rất có aura." },
+      { emoji:"☁️", name:"Miếng mây bỏ túi", desc:"Dùng để mềm lòng trong những ngày khô cứng." },
+      { emoji:"💌", name:"Lời động viên hết hạn", desc:"Đọc vẫn thấy đỡ dù đã quá date." },
+      { emoji:"🛸", name:"Vé thoát drama", desc:"Chỉ có tác dụng trong tưởng tượng." }
+    ];
+
+    const dangerIcons = ["👾","👽","💀","😈"];
+
+    function saveData() {
+      localStorage.setItem("popBestScore", bestScore);
+      localStorage.setItem("popCollection", JSON.stringify(collection));
+    }
+
+    function updateBestScoreUI() {
+      bestScoreEl.textContent = bestScore;
+    }
 
     function createStars() {
       if (starsCreated) return;
       starsCreated = true;
-
-      for (let i = 0; i < 60; i++) {
+      for (let i = 0; i < 50; i++) {
         const star = document.createElement("div");
         star.classList.add("star");
         star.style.left = Math.random() * window.innerWidth + "px";
@@ -485,87 +666,148 @@
       readyScreen.classList.add("hidden");
       gameUI.classList.remove("hidden");
       scoreBoard.classList.remove("hidden");
-      comboBoard.classList.remove("hidden");
+      bestBoard.classList.remove("hidden");
+      dangerBoard.classList.remove("hidden");
       restartBtn.classList.remove("hidden");
+      collectionBtn.classList.remove("hidden");
+      updateBestScoreUI();
       restartGame();
     }
 
     function createMochi() {
-      const mochi = document.createElement("div");
-      const type = Math.random() > 0.5 ? "female" : "male";
-      mochi.classList.add("mochi", type);
+      if (!gameRunning) return;
 
-      const size = Math.random() * 18 + 60;
-      mochi.style.width = size + "px";
-      mochi.style.height = size + "px";
+      const rand = Math.random();
+      const size = Math.random() * 16 + 62;
+      const obj = document.createElement("div");
 
-      mochi.style.left = Math.random() * (window.innerWidth - size) + "px";
-      mochi.style.top = Math.random() * (window.innerHeight - size - 140) + 100 + "px";
-      mochi.style.animationDuration = (Math.random() * 2 + 3) + "s";
+      obj.style.width = size + "px";
+      obj.style.height = size + "px";
+      obj.style.left = Math.random() * (window.innerWidth - size) + "px";
+      obj.style.top = Math.random() * (window.innerHeight - size - 180) + 110 + "px";
+      obj.style.animationDuration = (Math.random() * 2 + 3) + "s";
 
-      const mouthType = ["smile", "flat", "o"][Math.floor(Math.random() * 3)];
-      let mouthClass = "mouth";
-      if (mouthType === "flat") mouthClass += " flat";
-      if (mouthType === "o") mouthClass += " o";
+      if (rand < 0.08) {
+        // danger thật
+        obj.classList.add("danger");
+        obj.textContent = dangerIcons[Math.floor(Math.random() * dangerIcons.length)];
+        obj.addEventListener("click", () => hitDanger(obj, "Bạn đã ấn trúng cục đáng nghi và nó phản dame."));
+      } else if (rand < 0.16) {
+        // quái giả dạng
+        obj.classList.add("fake-danger");
+        obj.innerHTML = `
+          <div class="face">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <div class="blush left"></div>
+            <div class="blush right"></div>
+            <div class="evil-mouth"></div>
+          </div>
+        `;
+        obj.addEventListener("click", () => hitDanger(obj, "Bạn đã tin nhầm mochi giả vờ tử tế."));
+      } else {
+        const type = Math.random() > 0.5 ? "female" : "male";
+        obj.classList.add("mochi", type);
+        obj.innerHTML = `
+          <div class="face">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <div class="blush left"></div>
+            <div class="blush right"></div>
+            <div class="mouth"></div>
+          </div>
+        `;
+        obj.addEventListener("click", () => popMochi(obj));
+      }
 
-      mochi.innerHTML = `
-        <div class="face">
-          <div class="eye left"></div>
-          <div class="eye right"></div>
-          <div class="blush left"></div>
-          <div class="blush right"></div>
-          <div class="${mouthClass}"></div>
-        </div>
-      `;
-
-      mochi.addEventListener("click", () => popMochi(mochi));
-      gameArea.appendChild(mochi);
+      gameArea.appendChild(obj);
+      checkLoseByCrowd();
     }
 
     function popMochi(mochi) {
+      if (!gameRunning) return;
+
       const rect = mochi.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
 
-      mochi.classList.add("pop");
+      mochi.classList.add("squish");
+      setTimeout(() => mochi.classList.add("pop"), 70);
 
-      createParticles(centerX, centerY);
-      playPopSound();
+      const now = Date.now();
+      if (now - lastPopTime < 550) {
+        fastPopChain++;
+      } else {
+        fastPopChain = 1;
+      }
+      lastPopTime = now;
 
-      score++;
-      combo++;
+      if (fastPopChain >= 5) comboMultiplier = 3;
+      else if (fastPopChain >= 3) comboMultiplier = 2;
+      else comboMultiplier = 1;
+
+      if (comboMultiplier > 1) {
+        comboCountEl.textContent = comboMultiplier;
+        comboBoard.classList.remove("hidden");
+        comboBoard.classList.add("show");
+      } else {
+        comboBoard.classList.remove("show");
+      }
+
+      const gained = comboMultiplier;
+      score += gained;
       scoreEl.textContent = score;
-      comboEl.textContent = combo;
 
-      let points = "+1";
-      if (combo >= 10) points = "✨ x" + combo;
-      showScore(centerX, centerY, points);
+      createParticles(centerX, centerY, false);
+      showScore(centerX, centerY, `+${gained}`);
 
-      clearTimeout(comboTimeout);
-      comboTimeout = setTimeout(() => {
-        combo = 0;
-        comboEl.textContent = combo;
-      }, 1800);
+      if (score > bestScore) {
+        bestScore = score;
+        saveData();
+        updateBestScoreUI();
+      }
+
+      if (score % 5 === 0) {
+        showMessage(randomEncourage[Math.floor(Math.random() * randomEncourage.length)]);
+      }
+
+      if (fastPopChain === 4 || fastPopChain === 7) {
+        showMessage(hypeMessages[Math.floor(Math.random() * hypeMessages.length)]);
+      }
 
       setTimeout(() => {
         mochi.remove();
-        createMochi();
+        if (gameRunning) createMochi();
       }, 200);
     }
 
-    function createParticles(x, y) {
-      const emojis = ["⭐", "✨", "💗", "☁️", "💫"];
+    function hitDanger(obj, reason) {
+      if (!gameRunning) return;
+
+      const rect = obj.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+
+      createParticles(centerX, centerY, true);
+      obj.classList.add("pop");
+
+      setTimeout(() => {
+        endGame(reason);
+      }, 180);
+    }
+
+    function createParticles(x, y, isDanger) {
+      const emojis = isDanger ? ["💥","⚡","☠️","🔥"] : ["⭐", "✨", "💗", "☁️", "🫧"];
       for (let i = 0; i < 10; i++) {
         const particle = document.createElement("div");
         particle.classList.add("particle");
         particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
         particle.style.left = x + "px";
         particle.style.top = y + "px";
-        particle.style.setProperty("--x", `${(Math.random() - 0.5) * 100}px`);
-        particle.style.setProperty("--y", `${(Math.random() - 0.5) * 100}px`);
-        particle.style.fontSize = (Math.random() * 10 + 12) + "px";
+        particle.style.setProperty("--x", `${(Math.random() - 0.5) * 110}px`);
+        particle.style.setProperty("--y", `${(Math.random() - 0.5) * 110}px`);
+        particle.style.fontSize = (Math.random() * 10 + 13) + "px";
         document.body.appendChild(particle);
-
         setTimeout(() => particle.remove(), 800);
       }
     }
@@ -574,49 +816,155 @@
       const plus = document.createElement("div");
       plus.classList.add("plus-score");
       plus.textContent = text;
-      plus.style.left = x - 10 + "px";
-      plus.style.top = y - 10 + "px";
+      plus.style.left = x - 8 + "px";
+      plus.style.top = y - 8 + "px";
       document.body.appendChild(plus);
-
       setTimeout(() => plus.remove(), 800);
     }
 
+    function showMessage(text) {
+      messageBox.textContent = text;
+      messageBox.classList.add("show");
+      clearTimeout(messageBox.hideTimer);
+      messageBox.hideTimer = setTimeout(() => {
+        messageBox.classList.remove("show");
+      }, 2200);
+    }
+
+    function checkLoseByCrowd() {
+      const objects = gameArea.querySelectorAll(".mochi, .danger, .fake-danger").length;
+      limitCount.textContent = `${objects}/${maxObjects}`;
+
+      if (objects >= maxObjects - 2) {
+        showMessage(warningMessages[Math.floor(Math.random() * warningMessages.length)]);
+      }
+
+      if (objects >= maxObjects) {
+        endGame(gameOverLines[Math.floor(Math.random() * gameOverLines.length)]);
+      }
+    }
+
+    function endGame(text) {
+      gameRunning = false;
+      clearInterval(spawnInterval);
+      clearInterval(difficultyTimer);
+      comboBoard.classList.remove("show");
+      gameOverText.textContent = text;
+      gameOverScreen.classList.remove("hidden");
+    }
+
+    function showGift() {
+      gameOverScreen.classList.add("hidden");
+      rewardText.innerHTML = "...";
+      playAgainBtn.classList.add("hidden");
+      seeCollectionBtn.classList.add("hidden");
+      document.getElementById("giftBox").textContent = "🎁";
+      giftScreen.classList.remove("hidden");
+    }
+
+    function openGift() {
+      document.getElementById("giftBox").textContent = "🎉";
+      const gift = gifts[Math.floor(Math.random() * gifts.length)];
+
+      rewardText.innerHTML = `${gift.emoji} Bạn nhận được: <b>${gift.name}</b><br>${gift.desc}`;
+
+      const exists = collection.some(item => item.name === gift.name);
+      if (!exists) {
+        collection.push(gift);
+        saveData();
+      }
+
+      playAgainBtn.classList.remove("hidden");
+      seeCollectionBtn.classList.remove("hidden");
+    }
+
+    function playAgain() {
+      giftScreen.classList.add("hidden");
+      restartGame();
+    }
+
     function restartGame() {
+      clearInterval(spawnInterval);
+      clearInterval(difficultyTimer);
+
       score = 0;
-      combo = 0;
       scoreEl.textContent = score;
-      comboEl.textContent = combo;
       gameArea.innerHTML = "";
       starsCreated = false;
       createStars();
 
-      for (let i = 0; i < mochiCount; i++) {
+      gameRunning = true;
+      fastPopChain = 0;
+      lastPopTime = 0;
+      comboMultiplier = 1;
+      comboBoard.classList.remove("show");
+      messageBox.classList.remove("show");
+
+      for (let i = 0; i < 4; i++) {
         createMochi();
+      }
+
+      let spawnRate = 1700;
+      spawnInterval = setInterval(() => {
+        createMochi();
+      }, spawnRate);
+
+      difficultyTimer = setInterval(() => {
+        if (!gameRunning) return;
+        createMochi();
+      }, 5200);
+    }
+
+    function openCollection() {
+      readyScreen.classList.add("hidden");
+      giftScreen.classList.add("hidden");
+      gameOverScreen.classList.add("hidden");
+      collectionScreen.classList.remove("hidden");
+      renderCollection();
+    }
+
+    function closeCollection() {
+      collectionScreen.classList.add("hidden");
+
+      if (!gameRunning && !introScreen.classList.contains("hidden") === false) return;
+
+      if (gameUI.classList.contains("hidden")) {
+        readyScreen.classList.remove("hidden");
+      } else if (!gameRunning) {
+        gameOverScreen.classList.remove("hidden");
       }
     }
 
-    function playPopSound() {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
+    function renderCollection() {
+      collectionGrid.innerHTML = "";
 
-      oscillator.type = "sine";
-      oscillator.frequency.setValueAtTime(380, audioCtx.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(220, audioCtx.currentTime + 0.08);
+      if (collection.length === 0) {
+        collectionGrid.innerHTML = `
+          <div class="item-card" style="grid-column: 1 / -1; text-align:center;">
+            <div class="item-emoji">📦</div>
+            <div><b>Chưa có gì trong túi hết</b></div>
+            <div style="opacity:0.75; margin-top:6px;">Chơi rồi mở quà để nhặt dần nha.</div>
+          </div>
+        `;
+        collectionCount.textContent = "Bạn chưa nhặt được gì cả.";
+        return;
+      }
 
-      gainNode.gain.setValueAtTime(0.06, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+      collection.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "item-card";
+        card.innerHTML = `
+          <div class="item-emoji">${item.emoji}</div>
+          <div><b>${item.name}</b></div>
+          <div style="opacity:0.78; margin-top:6px; font-size:0.92rem;">${item.desc}</div>
+        `;
+        collectionGrid.appendChild(card);
+      });
 
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-
-      oscillator.start();
-      oscillator.stop(audioCtx.currentTime + 0.08);
+      collectionCount.textContent = `Bạn đã nhặt được ${collection.length} món vô tri nhưng đáng yêu.`;
     }
 
-    window.addEventListener("resize", () => {
-      restartGame();
-    });
+    updateBestScoreUI();
   </script>
 
 </body>

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Sổ tài chính của tôi</title>
+
+<style>
+body {
+  font-family: serif;
+  background: #f5f1eb;
+  color: #3e3e3e;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+}
+
+.tabs button {
+  margin: 3px;
+  padding: 8px 12px;
+  border: none;
+  background: #e0d8cf;
+  cursor: pointer;
+}
+
+.tabs button.active {
+  background: #bfae9f;
+  color: white;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+input, select {
+  padding: 6px;
+  margin: 5px;
+}
+
+button {
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+td, th {
+  border-bottom: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.note {
+  width: 100%;
+  height: 80px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 20px;
+  font-style: italic;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>SỔ TÀI CHÍNH CỦA TÔI</h1>
+
+<div class="tabs" id="tabs"></div>
+
+<div class="card">
+  <label>💰 Tiền đầu tháng:</label>
+  <input type="number" id="initialMoney">
+  <button onclick="saveInitial()">Lưu</button>
+
+  <h3>📊 Tổng đã chi: <span id="total">0</span></h3>
+  <h3>💼 Còn lại: <span id="remain">0</span></h3>
+</div>
+
+<div class="card">
+  <h3>+ Thêm khoản chi</h3>
+  <input type="date" id="date">
+  <input type="text" id="desc" placeholder="Nội dung">
+  <input type="number" id="amount" placeholder="Số tiền">
+  <button onclick="addExpense()">Thêm</button>
+</div>
+
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Ngày</th>
+        <th>Nội dung</th>
+        <th>Tiền</th>
+        <th>Còn lại</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="table"></tbody>
+  </table>
+</div>
+
+<div class="card">
+  <h3>📝 Ghi chú</h3>
+  <textarea id="note" class="note"></textarea>
+  <button onclick="saveNote()">Lưu ghi chú</button>
+</div>
+
+<div class="footer">made by Seri</div>
+
+</div>
+
+<script>
+let currentMonth = 1;
+
+function getData() {
+  return JSON.parse(localStorage.getItem("finance")) || {};
+}
+
+function saveData(data) {
+  localStorage.setItem("finance", JSON.stringify(data));
+}
+
+function formatMoney(n) {
+  return Number(n).toLocaleString("vi-VN") + "đ";
+}
+
+function initTabs() {
+  let tabs = document.getElementById("tabs");
+  tabs.innerHTML = "";
+  for (let i = 1; i <= 12; i++) {
+    let btn = document.createElement("button");
+    btn.innerText = "Tháng " + i;
+    if (i === currentMonth) btn.classList.add("active");
+    btn.onclick = () => {
+      currentMonth = i;
+      load();
+    };
+    tabs.appendChild(btn);
+  }
+}
+
+function load() {
+  initTabs();
+  let data = getData();
+
+  if (!data[currentMonth]) {
+    data[currentMonth] = { initial: 0, expenses: [], note: "" };
+    saveData(data);
+  }
+
+  let month = data[currentMonth];
+
+  document.getElementById("initialMoney").value = month.initial;
+  document.getElementById("note").value = month.note;
+
+  renderTable();
+}
+
+function saveInitial() {
+  let data = getData();
+  data[currentMonth].initial = Number(document.getElementById("initialMoney").value);
+  saveData(data);
+  renderTable();
+}
+
+function addExpense() {
+  let date = document.getElementById("date").value;
+  let desc = document.getElementById("desc").value;
+  let amount = Number(document.getElementById("amount").value);
+
+  if (!date || !desc || !amount) return;
+
+  let data = getData();
+  data[currentMonth].expenses.push({ date, desc, amount });
+
+  saveData(data);
+  load();
+}
+
+function deleteExpense(index) {
+  let data = getData();
+  data[currentMonth].expenses.splice(index, 1);
+  saveData(data);
+  load();
+}
+
+function renderTable() {
+  let data = getData();
+  let month = data[currentMonth];
+
+  let table = document.getElementById("table");
+  table.innerHTML = "";
+
+  let total = 0;
+
+  month.expenses.forEach((e, i) => {
+    total += e.amount;
+    let remain = month.initial - total;
+
+    let row = `
+      <tr>
+        <td>${e.date}</td>
+        <td>${e.desc}</td>
+        <td>${formatMoney(e.amount)}</td>
+        <td>${formatMoney(remain)}</td>
+        <td><button onclick="deleteExpense(${i})">Xoá</button></td>
+      </tr>
+    `;
+    table.innerHTML += row;
+  });
+
+  document.getElementById("total").innerText = formatMoney(total);
+  document.getElementById("remain").innerText = formatMoney(month.initial - total);
+}
+
+function saveNote() {
+  let data = getData();
+  data[currentMonth].note = document.getElementById("note").value;
+  saveData(data);
+}
+
+load();
+</script>
+
+</body>
+</html>

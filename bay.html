@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skater</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+
+    body {
+      overflow: hidden;
+      background: #111;
+      font-family: "Segoe UI", sans-serif;
+    }
+
+    canvas {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    .ui {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .score {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(0,0,0,0.6);
+    }
+
+    .best {
+      position: absolute;
+      top: 60px;
+      left: 20px;
+      color: rgba(255,255,255,0.8);
+      font-size: 18px;
+    }
+
+    .combo {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      color: #ffe7a3;
+      font-size: 24px;
+      font-weight: bold;
+      opacity: 0;
+      transition: 0.3s;
+      text-shadow: 0 0 20px #ffcc66;
+    }
+
+    .menu {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      background: linear-gradient(to bottom, rgba(255,130,120,0.15), rgba(0,0,0,0.55));
+      backdrop-filter: blur(5px);
+      pointer-events: auto;
+    }
+
+    .title {
+      font-size: 64px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 30px rgba(255,200,150,0.7);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.8;
+      margin-bottom: 40px;
+    }
+
+    button {
+      padding: 16px 40px;
+      border: none;
+      border-radius: 999px;
+      font-size: 18px;
+      cursor: pointer;
+      background: linear-gradient(to right, #ffb36b, #ff7b8e);
+      color: white;
+      box-shadow: 0 10px 25px rgba(255,120,120,0.4);
+      transition: 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      color: rgba(255,255,255,0.75);
+      font-size: 14px;
+    }
+
+    .fade {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.45));
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <div class="ui">
+    <div class="score">0</div>
+    <div class="best">Best: 0</div>
+    <div class="combo">FLOW x1</div>
+
+    <div class="menu" id="menu">
+      <div class="title">Golden Hour</div>
+      <div class="subtitle">Chill Roller Skating Endless Runner</div>
+      <button id="startBtn">PLAY</button>
+      <div class="controls">
+        ← → để né • SPACE để nhảy • Mobile vuốt
+      </div>
+    </div>
+
+    <div class="fade"></div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('game');
+    const ctx = canvas.getContext('2d');
+
+    let w, h;
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    resize();
+    window.addEventListener('resize', resize);
+
+    const lanes = [-1, 0, 1];
+
+    const player = {
+      lane: 1,
+      y: 0,
+      vy: 0,
+      jumping: false,
+      size: 45,
+      glow: 0,
+      trail: []
+    };
+
+    let obstacles = [];
+    let particles = [];
+
+    let speed = 7;
+    let score = 0;
+    let best = localStorage.getItem('golden-best') || 0;
+    let gameOver = false;
+    let started = false;
+    let combo = 1;
+
+    const scoreEl = document.querySelector('.score');
+    const bestEl = document.querySelector('.best');
+    const comboEl = document.querySelector('.combo');
+    const menu = document.getElementById('menu');
+    const startBtn = document.getElementById('startBtn');
+
+    bestEl.textContent = 'Best: ' + best;
+
+    function laneX(lane) {
+      return w / 2 + lanes[lane] * 140;
+    }
+
+    function resetGame() {
+      obstacles = [];
+      particles = [];
+      score = 0;
+      speed = 7;
+      combo = 1;
+      player.lane = 1;
+      player.y = 0;
+      player.vy = 0;
+      player.jumping = false;
+      player.trail = [];
+      gameOver = false;
+    }
+
+    startBtn.onclick = () => {
+      menu.style.display = 'none';
+      resetGame();
+      started = true;
+    };
+
+    function jump() {
+      if (!player.jumping) {
+        player.jumping = true;
+        player.vy = -20;
+      }
+    }
+
+    function moveLeft() {
+      player.lane = Math.max(0, player.lane - 1);
+    }
+
+    function moveRight() {
+      player.lane = Math.min(2, player.lane + 1);
+    }
+
+    window.addEventListener('keydown', e => {
+      if (!started) return;
+
+      if (e.key === 'ArrowLeft') moveLeft();
+      if (e.key === 'ArrowRight') moveRight();
+      if (e.key === ' ' || e.key === 'ArrowUp') jump();
+    });
+
+    let touchStartX = 0;
+    let touchStartY = 0;
+
+    window.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    });
+
+    window.addEventListener('touchend', e => {
+      if (!started) return;
+
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > 30) moveRight();
+        if (dx < -30) moveLeft();
+      } else {
+        if (dy < -30) jump();
+      }
+    });
+
+    function spawnObstacle() {
+      const types = ['rock', 'wood', 'branch'];
+
+      obstacles.push({
+        lane: Math.floor(Math.random() * 3),
+        y: -100,
+        size: 45 + Math.random() * 20,
+        type: types[Math.floor(Math.random() * types.length)]
+      });
+    }
+
+    function spawnParticles(x, y) {
+      for (let i = 0; i < 14; i++) {
+        particles.push({
+          x,
+          y,
+          vx: (Math.random() - 0.5) * 5,
+          vy: (Math.random() - 0.5) * 5,
+          life: 40
+        });
+      }
+    }
+
+    function drawBackground() {
+      const gradient = ctx.createLinearGradient(0, 0, 0, h);
+      gradient.addColorStop(0, '#ff9a7a');
+      gradient.addColorStop(0.45, '#ffb28f');
+      gradient.addColorStop(1, '#24324f');
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = 'rgba(255,255,255,0.08)';
+
+      for (let i = 0; i < 80; i++) {
+        ctx.beginPath();
+        ctx.arc((i * 170 + performance.now() * 0.02) % w, (i * 80) % h, 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = '#1d2438';
+      ctx.fillRect(0, h * 0.75, w, h * 0.25);
+
+      for (let i = 0; i < 20; i++) {
+        const x = i * 120;
+        const height = 100 + Math.sin(i) * 50;
+
+        ctx.fillStyle = 'rgba(20,20,30,0.6)';
+        ctx.fillRect(x, h * 0.75 - height, 70, height);
+      }
+    }
+
+    function drawRoad() {
+      const roadW = 500;
+      const x = w / 2 - roadW / 2;
+
+      ctx.fillStyle = '#2e3447';
+      ctx.fillRect(x, h * 0.55, roadW, h * 0.45);
+
+      ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+      ctx.lineWidth = 6;
+
+      ctx.beginPath();
+      ctx.moveTo(w / 2 - 80, h);
+      ctx.lineTo(w / 2 - 80, h * 0.55);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(w / 2 + 80, h);
+      ctx.lineTo(w / 2 + 80, h * 0.55);
+      ctx.stroke();
+
+      for (let i = 0; i < 12; i++) {
+        const yy = (i * 120 + performance.now() * speed * 0.5) % h;
+
+        ctx.fillStyle = 'rgba(255,230,180,0.4)';
+        ctx.fillRect(w / 2 - 6, yy, 12, 50);
+      }
+    }
+
+    function drawPlayer() {
+      const x = laneX(player.lane);
+      const y = h - 140 + player.y;
+
+      player.trail.push({ x, y: y + 25, alpha: 1 });
+
+      if (player.trail.length > 18) {
+        player.trail.shift();
+      }
+
+      player.trail.forEach(t => {
+        ctx.fillStyle = `rgba(255,190,140,${t.alpha * 0.08})`;
+        ctx.beginPath();
+        ctx.arc(t.x, t.y, 24, 0, Math.PI * 2);
+        ctx.fill();
+        t.alpha -= 0.05;
+      });
+
+      ctx.shadowBlur = 25;
+      ctx.shadowColor = '#ffc48b';
+
+      ctx.fillStyle = '#ffe0c7';
+      ctx.beginPath();
+      ctx.arc(x, y - 40, 18, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#f5a0a8';
+      ctx.fillRect(x - 18, y - 20, 36, 55);
+
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 4;
+
+      ctx.beginPath();
+      ctx.moveTo(x - 10, y + 35);
+      ctx.lineTo(x - 18, y + 60);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x + 10, y + 35);
+      ctx.lineTo(x + 18, y + 60);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ffcc88';
+      ctx.fillRect(x - 28, y + 56, 18, 6);
+      ctx.fillRect(x + 10, y + 56, 18, 6);
+
+      ctx.shadowBlur = 0;
+    }
+
+    function drawObstacle(obs) {
+      const x = laneX(obs.lane);
+      const y = obs.y;
+
+      if (obs.type === 'rock') {
+        ctx.fillStyle = '#8b8f9c';
+        ctx.beginPath();
+        ctx.arc(x, y, obs.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      if (obs.type === 'wood') {
+        ctx.fillStyle = '#8f5d3c';
+        ctx.fillRect(x - obs.size / 2, y - obs.size / 2, obs.size, obs.size);
+      }
+
+      if (obs.type === 'branch') {
+        ctx.strokeStyle = '#5b3d2b';
+        ctx.lineWidth = 8;
+
+        ctx.beginPath();
+        ctx.moveTo(x - 30, y - 10);
+        ctx.lineTo(x + 30, y + 10);
+        ctx.stroke();
+      }
+    }
+
+    function drawParticles() {
+      particles.forEach((p, index) => {
+        ctx.fillStyle = `rgba(255,220,180,${p.life / 40})`;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+        ctx.fill();
+
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+
+        if (p.life <= 0) particles.splice(index, 1);
+      });
+    }
+
+    function update() {
+      if (!started || gameOver) return;
+
+      score += 0.1;
+      speed += 0.0008;
+
+      player.vy += 1;
+      player.y += player.vy;
+
+      if (player.y >= 0) {
+        player.y = 0;
+        player.vy = 0;
+        player.jumping = false;
+      }
+
+      if (Math.random() < 0.025 + speed * 0.0008) {
+        spawnObstacle();
+      }
+
+      obstacles.forEach((obs, index) => {
+        obs.y += speed;
+
+        const px = laneX(player.lane);
+        const py = h - 140 + player.y;
+        const ox = laneX(obs.lane);
+        const oy = obs.y;
+
+        const dist = Math.hypot(px - ox, py - oy);
+
+        if (dist < 50 && !player.jumping) {
+          spawnParticles(px, py);
+          gameOver = true;
+
+          if (Math.floor(score) > best) {
+            best = Math.floor(score);
+            localStorage.setItem('golden-best', best);
+          }
+
+          setTimeout(() => {
+            menu.style.display = 'flex';
+          }, 1000);
+        }
+
+        if (obs.y > h + 100) {
+          obstacles.splice(index, 1);
+          combo++;
+
+          comboEl.style.opacity = 1;
+          comboEl.textContent = 'FLOW x' + combo;
+
+          setTimeout(() => {
+            comboEl.style.opacity = 0;
+          }, 300);
+        }
+      });
+
+      scoreEl.textContent = Math.floor(score);
+      bestEl.textContent = 'Best: ' + best;
+    }
+
+    function render() {
+      ctx.clearRect(0, 0, w, h);
+
+      drawBackground();
+      drawRoad();
+
+      obstacles.forEach(drawObstacle);
+
+      drawPlayer();
+      drawParticles();
+
+      if (gameOver) {
+        ctx.fillStyle = 'rgba(0,0,0,0.45)';
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.fillStyle = 'white';
+        ctx.font = 'bold 64px Segoe UI';
+        ctx.textAlign = 'center';
+        ctx.fillText('GAME OVER', w / 2, h / 2);
+
+        ctx.font = '24px Segoe UI';
+        ctx.fillText('Điểm: ' + Math.floor(score), w / 2, h / 2 + 50);
+      }
+    }
+
+    function loop() {
+      update();
+      render();
+      requestAnimationFrame(loop);
+    }
+
+    loop();
+  </script>
+</body>
+</html>

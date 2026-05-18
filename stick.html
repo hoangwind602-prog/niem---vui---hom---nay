@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>BONK ARENA</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    user-select:none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body{
+    overflow:hidden;
+    background:#0f0f0f;
+    font-family:Arial, Helvetica, sans-serif;
+    color:white;
+}
+
+#game{
+    width:100vw;
+    height:100vh;
+    position:relative;
+    overflow:hidden;
+    background:
+    radial-gradient(circle at top,#1d1d1d,#080808);
+}
+
+/* TITLE */
+
+.title{
+    position:absolute;
+    top:20px;
+    width:100%;
+    text-align:center;
+    font-size:42px;
+    font-weight:900;
+    letter-spacing:4px;
+    color:white;
+    text-shadow:
+    0 0 10px red,
+    0 0 20px red;
+    z-index:20;
+}
+
+.subtitle{
+    position:absolute;
+    top:75px;
+    width:100%;
+    text-align:center;
+    color:#999;
+    font-size:14px;
+    z-index:20;
+}
+
+/* HEALTH */
+
+.health-container{
+    position:absolute;
+    top:120px;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:0 50px;
+    z-index:20;
+}
+
+.health-box{
+    width:40%;
+}
+
+.name{
+    margin-bottom:10px;
+    font-weight:bold;
+    font-size:18px;
+}
+
+.bar{
+    width:100%;
+    height:25px;
+    background:#222;
+    border:2px solid #555;
+    overflow:hidden;
+    border-radius:20px;
+}
+
+.hp{
+    height:100%;
+    width:100%;
+    transition:0.2s;
+}
+
+.leftHP{
+    background:linear-gradient(to right,#ff3b3b,#ff8a8a);
+}
+
+.rightHP{
+    background:linear-gradient(to right,#3b8dff,#82c3ff);
+}
+
+/* ARENA */
+
+.arena{
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    justify-content:space-around;
+    align-items:flex-end;
+    padding-bottom:100px;
+}
+
+/* STICKMAN */
+
+.fighter{
+    width:180px;
+    height:300px;
+    position:relative;
+    transition:0.08s;
+}
+
+.head{
+    width:60px;
+    height:60px;
+    border:6px solid white;
+    border-radius:50%;
+    position:absolute;
+    top:0;
+    left:60px;
+    background:#111;
+}
+
+.body{
+    width:8px;
+    height:100px;
+    background:white;
+    position:absolute;
+    top:60px;
+    left:86px;
+}
+
+.arm{
+    width:70px;
+    height:6px;
+    background:white;
+    position:absolute;
+    top:95px;
+    left:25px;
+    transform-origin:right center;
+    transition:0.05s;
+}
+
+.arm.right{
+    left:86px;
+    transform-origin:left center;
+}
+
+.leg{
+    width:80px;
+    height:6px;
+    background:white;
+    position:absolute;
+    top:170px;
+    left:20px;
+    transform:rotate(25deg);
+    transform-origin:right center;
+}
+
+.leg.right{
+    left:86px;
+    transform:rotate(-25deg);
+    transform-origin:left center;
+}
+
+/* HIT EFFECT */
+
+.hitText{
+    position:absolute;
+    font-size:40px;
+    font-weight:900;
+    pointer-events:none;
+    animation:pop 0.5s forwards;
+    text-shadow:0 0 10px white;
+}
+
+@keyframes pop{
+    0%{
+        opacity:1;
+        transform:scale(0.5) translateY(0);
+    }
+    100%{
+        opacity:0;
+        transform:scale(1.8) translateY(-100px);
+    }
+}
+
+/* DEAD SCREEN */
+
+#overlay{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.85);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    z-index:999;
+}
+
+#ko{
+    font-size:90px;
+    font-weight:900;
+    color:red;
+    text-shadow:
+    0 0 20px red,
+    0 0 40px red;
+    animation:pulse 1s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+    100%{transform:scale(1);}
+}
+
+#winner{
+    margin-top:20px;
+    font-size:30px;
+    color:white;
+}
+
+button{
+    margin-top:40px;
+    padding:15px 40px;
+    border:none;
+    background:red;
+    color:white;
+    font-size:20px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+button:hover{
+    transform:scale(1.1);
+}
+
+/* FLOOR */
+
+.floor{
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:80px;
+    background:#151515;
+    border-top:4px solid #333;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+    .fighter{
+        transform:scale(0.8);
+    }
+
+    .title{
+        font-size:30px;
+    }
+
+    .health-container{
+        padding:0 20px;
+    }
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+<div class="title">BONK ARENA</div>
+<div class="subtitle">Punch first. Think never.</div>
+
+<div class="health-container">
+
+<div class="health-box">
+<div class="name">RAGE GUY</div>
+<div class="bar">
+<div class="hp leftHP" id="leftHP"></div>
+</div>
+</div>
+
+<div class="health-box">
+<div class="name" style="text-align:right;">BONK MAN</div>
+<div class="bar">
+<div class="hp rightHP" id="rightHP"></div>
+</div>
+</div>
+
+</div>
+
+<div class="arena">
+
+<div class="fighter" id="leftFighter">
+
+<div class="head"></div>
+<div class="body"></div>
+<div class="arm" id="leftArm1"></div>
+<div class="arm right" id="leftArm2"></div>
+<div class="leg"></div>
+<div class="leg right"></div>
+
+</div>
+
+<div class="fighter" id="rightFighter">
+
+<div class="head"></div>
+<div class="body"></div>
+<div class="arm" id="rightArm1"></div>
+<div class="arm right" id="rightArm2"></div>
+<div class="leg"></div>
+<div class="leg right"></div>
+
+</div>
+
+</div>
+
+<div class="floor"></div>
+
+<div id="overlay">
+<div id="ko">KO</div>
+<div id="winner"></div>
+<button onclick="restartGame()">PLAY AGAIN</button>
+</div>
+
+</div>
+
+<script>
+
+let leftHealth = 100;
+let rightHealth = 100;
+
+let gameOver = false;
+
+const leftHP = document.getElementById("leftHP");
+const rightHP = document.getElementById("rightHP");
+
+const leftFighter = document.getElementById("leftFighter");
+const rightFighter = document.getElementById("rightFighter");
+
+const memes = [
+    "BONK",
+    "BỐP",
+    "CRITICAL",
+    "OOF",
+    "SKILL ISSUE",
+    "RAGE",
+    "PẶC",
+    "BOOM"
+];
+
+function random(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function updateHP(){
+
+    leftHP.style.width = leftHealth + "%";
+    rightHP.style.width = rightHealth + "%";
+
+}
+
+function screenShake(){
+
+    document.body.style.transform =
+    `translate(${random(-10,10)}px,${random(-10,10)}px)`;
+
+    setTimeout(()=>{
+        document.body.style.transform = "translate(0px,0px)";
+    },60);
+
+}
+
+function showText(text,x,y,color){
+
+    const hit = document.createElement("div");
+
+    hit.className = "hitText";
+    hit.innerText = text;
+
+    hit.style.left = x + "px";
+    hit.style.top = y + "px";
+    hit.style.color = color;
+
+    document.body.appendChild(hit);
+
+    setTimeout(()=>{
+        hit.remove();
+    },500);
+
+}
+
+function animatePunch(fighter,isLeft){
+
+    const arm = fighter.querySelector(".arm.right");
+
+    arm.style.transform =
+    isLeft ? "rotate(-40deg)" : "rotate(40deg)";
+
+    fighter.style.transform =
+    `translateX(${isLeft ? 20 : -20}px) rotate(${random(-5,5)}deg)`;
+
+    setTimeout(()=>{
+
+        arm.style.transform = "rotate(0deg)";
+        fighter.style.transform = "translateX(0px)";
+
+    },80);
+
+}
+
+function attackLeft(){
+
+    if(gameOver) return;
+
+    animatePunch(leftFighter,true);
+
+    let damage = random(5,15);
+
+    if(Math.random() < 0.15){
+        damage *= 2;
+    }
+
+    rightHealth -= damage;
+
+    if(rightHealth < 0){
+        rightHealth = 0;
+    }
+
+    updateHP();
+
+    screenShake();
+
+    showText(
+        memes[random(0,memes.length-1)],
+        window.innerWidth * 0.65,
+        random(250,450),
+        "#ff4d4d"
+    );
+
+    if(rightHealth <= 0){
+
+        endGame("RAGE GUY WINS");
+
+        return;
+    }
+
+    setTimeout(aiAttack,300);
+
+}
+
+function aiAttack(){
+
+    if(gameOver) return;
+
+    animatePunch(rightFighter,false);
+
+    let damage = random(4,13);
+
+    leftHealth -= damage;
+
+    if(leftHealth < 0){
+        leftHealth = 0;
+    }
+
+    updateHP();
+
+    screenShake();
+
+    showText(
+        memes[random(0,memes.length-1)],
+        window.innerWidth * 0.25,
+        random(250,450),
+        "#4da6ff"
+    );
+
+    if(leftHealth <= 0){
+
+        endGame("BONK MAN WINS");
+
+    }
+
+}
+
+function endGame(text){
+
+    gameOver = true;
+
+    document.getElementById("overlay").style.display = "flex";
+
+    document.getElementById("winner").innerText = text;
+
+}
+
+function restartGame(){
+
+    leftHealth = 100;
+    rightHealth = 100;
+
+    gameOver = false;
+
+    updateHP();
+
+    document.getElementById("overlay").style.display = "none";
+
+}
+
+/* CONTROLS */
+
+document.addEventListener("click",(e)=>{
+
+    if(gameOver) return;
+
+    if(e.clientX < window.innerWidth/2){
+
+        attackLeft();
+
+    }else{
+
+        aiAttack();
+
+    }
+
+});
+
+updateHP();
+
+</script>
+
+</body>
+</html>

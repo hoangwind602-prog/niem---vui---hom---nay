@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Hanzi Quest - Made by Seri</title>
+
+<style>
+
+body{
+
+    margin:0;
+
+    font-family:Arial,sans-serif;
+
+    background:#f4f7fb;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    min-height:100vh;
+
+}
+
+.card{
+
+    width:90%;
+
+    max-width:420px;
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:20px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+    text-align:center;
+
+}
+
+h1{
+
+    color:#4f46e5;
+
+}
+
+.word{
+
+    font-size:42px;
+
+    margin:25px 0;
+
+    font-weight:bold;
+
+}
+
+button{
+
+    width:100%;
+
+    padding:14px;
+
+    margin:8px 0;
+
+    border:none;
+
+    border-radius:12px;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    background:#4f46e5;
+
+    color:white;
+
+}
+
+button:hover{
+
+    opacity:.9;
+
+}
+
+#result{
+
+    margin-top:15px;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+}
+
+.score{
+
+    margin-top:15px;
+
+}
+
+footer{
+
+    margin-top:20px;
+
+    color:#888;
+
+    font-size:13px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>🎮 Hanzi Quest</h1>
+
+<p>Chọn nghĩa đúng</p>
+
+<div class="word" id="word"></div>
+
+<div id="answers"></div>
+
+<div id="result"></div>
+
+<div class="score">
+
+⭐ Điểm: <span id="score">0</span>
+
+</div>
+
+<footer>
+
+Made with ❤️ by Seri
+
+</footer>
+
+</div>
+
+<script>
+
+const words=[
+
+{cn:"爱情",vi:"Tình yêu"},
+
+{cn:"安排",vi:"Sắp xếp"},
+
+{cn:"按时",vi:"Đúng giờ"},
+
+{cn:"按照",vi:"Theo"},
+
+{cn:"安全",vi:"An toàn"},
+
+{cn:"报名",vi:"Đăng ký"},
+
+{cn:"保护",vi:"Bảo vệ"},
+
+{cn:"保证",vi:"Bảo đảm"},
+
+{cn:"表达",vi:"Biểu đạt"},
+
+{cn:"毕业",vi:"Tốt nghiệp"}
+  
+{cn:"包括",vi:"Bao gồm"}
+  
+{cn:"保证",vi:"Bảo đảm, bảo lãnh"}
+  
+{cn:"抱",vi:"Ôm"}
+  
+{cn:"抱歉",vi:"Có lỗi, ân hận"}
+  
+{cn:"报道",vi:"Đưa tin"} 
+  
+{cn:"倍",vi:"Gấp bội"} 
+
+{cn:"本来",vi:"Vốn dĩ, ban đầu"}  
+
+{cn:"笨",vi:"Ngu, ngốc"}  
+
+{cn:"笔记本",vi:"Sổ ghi chép"}    
+
+{cn:"遍",vi:"Lần, lượt, đợt"}
+
+{cn:"标准",vi:"Tiêu chuẩn, mẫu mưc"}
+
+{cn:"表格",vi:"Bảng biểu, bảng khai"}
+
+{cn:"表扬",vi:"Biểu dương, khen"}  
+
+{cn:"饼干",vi:"Bánh quy"}  
+
+{cn:"并且",vi:"Mà còn, hơn nữa"}
+
+{cn:"博士",vi:"Tiến sĩ"}
+    
+let score=0;
+
+function shuffle(arr){
+
+    return arr.sort(()=>Math.random()-0.5);
+
+}
+
+function nextQuestion(){
+
+result.innerHTML="";
+
+let current=words[Math.floor(Math.random()*words.length)];
+
+word.innerHTML=current.cn;
+
+let options=[current.vi];
+
+while(options.length<4){
+
+let random=words[Math.floor(Math.random()*words.length)].vi;
+
+if(!options.includes(random)){
+
+options.push(random);
+
+}
+
+}
+
+shuffle(options);
+
+answers.innerHTML="";
+
+options.forEach(op=>{
+
+let btn=document.createElement("button");
+
+btn.innerHTML=op;
+
+btn.onclick=function(){
+
+if(op==current.vi){
+
+result.innerHTML="✅ Chính xác!";
+
+result.style.color="green";
+
+score++;
+
+scoreText.innerHTML=score;
+
+}else{
+
+result.innerHTML="❌ Sai<br>Đáp án: "+current.vi;
+
+result.style.color="red";
+
+}
+
+setTimeout(nextQuestion,900);
+
+}
+
+answers.appendChild(btn);
+
+})
+
+}
+
+const word=document.getElementById("word");
+
+const answers=document.getElementById("answers");
+
+const result=document.getElementById("result");
+
+const scoreText=document.getElementById("score");
+
+nextQuestion();
+
+</script>
+
+</body>
+
+</html>

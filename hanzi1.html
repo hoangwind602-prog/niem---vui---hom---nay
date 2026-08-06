@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HSK4 Flashcards - Seri</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#f5f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:90%;
+    max-width:420px;
+    text-align:center;
+}
+
+h2{
+    color:#333;
+}
+
+.card{
+    height:260px;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.15);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    cursor:pointer;
+    transition:.3s;
+    padding:20px;
+}
+
+.card:hover{
+    transform:scale(1.02);
+}
+
+#content{
+    font-size:42px;
+    font-weight:bold;
+    color:#222;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 24px;
+    border:none;
+    border-radius:12px;
+    background:#4a90e2;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#357bd8;
+}
+
+.progress{
+    margin-top:15px;
+    color:#666;
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h2>📖 HSK4 Flashcards</h2>
+
+<div class="card" onclick="flipCard()">
+<div id="content"></div>
+</div>
+
+<button onclick="nextCard()">➡ Từ tiếp theo</button>
+
+<div class="progress" id="progress"></div>
+
+</div>
+
+<script>
+
+const cards=[
+
+{
+hanzi:"不过",
+pinyin:"búguò",
+meaning:"nhưng, nhưng mà"
+},
+
+{
+hanzi:"不得不",
+pinyin:"bùdébù",
+meaning:"đành phải, không thể không"
+},
+
+{
+hanzi:"不管",
+pinyin:"bùguǎn",
+meaning:"cho dù, bất kể"
+},
+
+{
+hanzi:"不仅",
+pinyin:"bùjǐn",
+meaning:"không chỉ, không những"
+},
+
+{
+hanzi:"部分",
+pinyin:"bùfen",
+meaning:"bộ phận, phần"
+},
+
+{
+hanzi:"擦",
+pinyin:"cā",
+meaning:"chùi, lau"
+},
+
+{
+hanzi:"猜",
+pinyin:"cāi",
+meaning:"đoán"
+},
+
+{
+hanzi:"材料",
+pinyin:"cáiliào",
+meaning:"vật liệu, nguyên liệu"
+},
+
+{
+hanzi:"参观",
+pinyin:"cānguān",
+meaning:"tham quan"
+},
+
+{
+hanzi:"差不多",
+pinyin:"chàbuduō",
+meaning:"khoảng, gần giống nhau"
+},
+
+{
+hanzi:"尝",
+pinyin:"cháng",
+meaning:"nếm, thử"
+},
+
+{
+hanzi:"长城",
+pinyin:"Chángchéng",
+meaning:"Vạn Lý Trường Thành"
+},
+
+{
+hanzi:"长江",
+pinyin:"Chángjiāng",
+meaning:"Trường Giang"
+},
+
+{
+hanzi:"场",
+pinyin:"chǎng",
+meaning:"lượng từ: trận, buổi, sân..."
+},
+
+{
+hanzi:"超过",
+pinyin:"chāoguò",
+meaning:"vượt qua, vượt quá"
+}
+
+];
+
+let index=0;
+let showFront=true;
+
+function display(){
+document.getElementById("content").innerHTML=cards[index].hanzi;
+document.getElementById("progress").innerHTML=(index+1)+" / "+cards.length;
+showFront=true;
+}
+
+function flipCard(){
+
+if(showFront){
+
+document.getElementById("content").innerHTML=
+"<div style='font-size:32px'>"+
+cards[index].pinyin+
+"</div><br><div style='font-size:24px;color:#666'>"+
+cards[index].meaning+
+"</div>";
+
+showFront=false;
+
+}else{
+
+document.getElementById("content").innerHTML=cards[index].hanzi;
+
+showFront=true;
+
+}
+
+}
+
+function nextCard(){
+
+index++;
+
+if(index>=cards.length){
+
+shuffle(cards);
+
+index=0;
+
+}
+
+display();
+
+}
+
+function shuffle(array){
+
+for(let i=array.length-1;i>0;i--){
+
+let j=Math.floor(Math.random()*(i+1));
+
+[array[i],array[j]]=[array[j],array[i]];
+
+}
+
+}
+
+display();
+
+</script>
+
+</body>
+</html>
